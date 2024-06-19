@@ -1,23 +1,17 @@
 {
+  "manifest_version": 3,
+  "version": "1.0.0",
   "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+  "name": "nice-extention",
+  "action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "24": "icon24.png",
+      "32": "icon32.png"
     },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
+    "default_title": "오늘 뭐임",
+    "default_popup": "index.html"
+  },
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
