@@ -13,8 +13,8 @@ const getSchool = async (keyword: string): Promise<School[] | null> => {
       },
     });
 
-    const schoolData = response.data.schoolInfo[1].row;
-    return schoolData;
+    const schoolData = response.data?.schoolInfo?.[1]?.row; // Adjusted to fetch the first school's row
+    return Array.isArray(schoolData) ? schoolData : [schoolData].filter(Boolean);
   } catch (error) {
     return null;
   }

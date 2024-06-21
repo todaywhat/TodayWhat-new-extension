@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import getMeal from '@apis/school/getMeal';
-// import getSchool from '@apis/school/getSchool';
-import StyledP from './style';
+import { useNavigate } from 'react-router-dom';
+import { Button } from './style';
 
 const Home = () => {
-  const [schoolData, setSchoolData] = useState(null);
-
-  useEffect(() => {
-    const fetchSchoolData = async () => {
-      // const res = await getSchool();
-      const res = await getMeal();
-      setSchoolData(res);
-    };
-
-    fetchSchoolData();
-  }, []);
-
-  return <StyledP>{schoolData ? JSON.stringify(schoolData) : 'Loading...'}</StyledP>;
+  const navigate = useNavigate();
+  return (
+    <>
+      <Button onClick={() => navigate('/profile')}>프로필</Button>
+      <br />
+      <Button onClick={() => navigate('/meal')}>급식</Button>
+      <br />
+      <Button onClick={() => navigate('/schedule')}>시간표</Button>
+      <br />
+    </>
+  );
 };
 
 export default Home;

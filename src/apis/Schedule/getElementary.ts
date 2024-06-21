@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getMeal = async () => {
+const getElementary = async () => {
   try {
     const { data } = await axios.get('https://open.neis.go.kr/hub/mealServiceDietInfo', {
       params: {
@@ -17,4 +17,4 @@ const getMeal = async () => {
   }
 };
 
-export default getMeal;
+export default getElementary;

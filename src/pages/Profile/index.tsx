@@ -1,12 +1,12 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
-import getSchool from '@apis/profile/getSchool';
-import getDepartment from '@apis/profile/getDepartment';
 import { School } from 'src/types/school';
 import { Department } from 'src/types/department';
+import getSchool from '@apis/Profile/getSchool';
+import getDepartment from '@apis/Profile/getDepartment';
 
-const SchoolSearch: React.FC = () => {
+const Profile: React.FC = () => {
   const [keyword, setKeyword] = useState<string>('');
-  const [schools, setSchools] = useState<School[]>([]);
+  const [searchSchools, setSearchSchools] = useState<School[]>([]);
   const [grade, setGrade] = useState<string>('');
   const [myClass, setMyClass] = useState<string>('');
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -16,7 +16,7 @@ const SchoolSearch: React.FC = () => {
       if (keyword.trim()) {
         fetchSchools(keyword);
       } else {
-        setSchools([]);
+        setSearchSchools([]);
       }
     }, 300);
 
@@ -30,14 +30,14 @@ const SchoolSearch: React.FC = () => {
   const fetchSchools = async (searchKeyword: string) => {
     try {
       const data = await getSchool(searchKeyword);
-      setSchools(data && data.length > 0 ? data : []);
+      setSearchSchools(data && data.length > 0 ? data : []);
     } catch {
-      setSchools([]);
+      setSearchSchools([]);
     }
   };
 
   const handleSelectSchool = async (school: School) => {
-    setSchools([]);
+    setSearchSchools([]);
     if (school.ATPT_OFCDC_SC_CODE) {
       fetchDepartments(school.ATPT_OFCDC_SC_CODE);
     }
@@ -59,9 +59,9 @@ const SchoolSearch: React.FC = () => {
     <>
       <div>
         <input type="text" value={keyword} onChange={handleChange(setKeyword)} placeholder="학교 이름을 입력하세요" />
-        {schools.length > 0 && (
+        {searchSchools.length > 0 && (
           <ul>
-            {schools.map((school) => (
+            {searchSchools.map((school) => (
               <li key={school.SCHUL_NM} onClick={() => handleSelectSchool(school)}>
                 {school.SCHUL_NM}
               </li>
@@ -84,4 +84,4 @@ const SchoolSearch: React.FC = () => {
   );
 };
 
-export default SchoolSearch;
+export default Profile;
