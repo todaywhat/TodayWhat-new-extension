@@ -1,5 +1,6 @@
 export interface School {
   ATPT_OFCDC_SC_CODE: string;
+  SD_SCHUL_CODE: string;
   SCHUL_NM: string;
   ADDR: string;
   ORG_TELNO: string;
