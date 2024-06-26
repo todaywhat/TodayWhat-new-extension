@@ -8,13 +8,21 @@ import { useCookies } from 'react-cookie';
 
 const Profile: React.FC = () => {
   const [searchSchools, setSearchSchools] = useState<School[]>([]);
-  const [departments, setDepartments] = useState<Department[]>([]);
-  const { setUserSchoolData, setUserGrade, setUserClass } = userData();
-  const [cookies] = useCookies(['SCHUL_NM', 'USER_GRADE', 'USER_CLASS']);
-  const { SCHUL_NM = '', USER_GRADE = '', USER_CLASS = '' } = cookies;
+  const { setUserSchoolData, setUserGrade, setUserClass, getSchoolMajorData, setUserMajorData } = userData();
+  const [cookies] = useCookies([
+    'SCHUL_NM',
+    'USER_GRADE',
+    'USER_CLASS',
+    'ATPT_OFCDC_SC_CODE',
+    'SD_SCHUL_CODE',
+    'SCHOOL_DDDEP_NM',
+    'USER_DDDEP_NM',
+  ]);
+  const { SCHUL_NM = '', USER_GRADE = '', USER_CLASS = '', SCHOOL_DDDEP_NM = [], USER_DDDEP_NM = '' } = cookies; // SCHOOL_DDDEP_NM 기본값 빈 배열로 지정
   const [keyword, setKeyword] = useState<string>(SCHUL_NM);
   const [grade, setGrade] = useState<string>(USER_GRADE);
   const [myClass, setMyClass] = useState<string>(USER_CLASS);
+  const [selectedValue, setSelectedValue] = useState<string>(USER_DDDEP_NM);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -54,16 +62,26 @@ const Profile: React.FC = () => {
     }
   };
 
-  const fetchDepartments = async (schoolCode: string, SD_SCHUL_CODE: string) => {
+  const fetchDepartments = async (ATPT_OFCDC_SC_CODE: string, SD_SCHUL_CODE: string) => {
+    setUserMajorData('선택안함');
+    setSelectedValue('선택안함');
     try {
-      const data = await getDepartment(schoolCode, SD_SCHUL_CODE);
-      setDepartments([
-        ...(data && data.length > 0 ? data : []),
-        { DDDEP_NM: '선택안함', SD_SCHUL_CODE: SD_SCHUL_CODE, ATPT_OFCDC_SC_CODE: schoolCode },
-      ]);
-    } catch {
-      setDepartments([{ DDDEP_NM: '선택안함', SD_SCHUL_CODE: SD_SCHUL_CODE, ATPT_OFCDC_SC_CODE: schoolCode }]);
+      const data = await getDepartment(ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE);
+      if (data && data.length > 0) {
+        const departmentNames = data.map((dept: Department) => dept.DDDEP_NM);
+        getSchoolMajorData(departmentNames);
+      } else {
+        getSchoolMajorData([]);
+      }
+    } catch (error) {
+      getSchoolMajorData([]);
     }
+  };
+
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedValue(value);
+    setUserMajorData(value);
   };
 
   return (
@@ -97,11 +115,11 @@ const Profile: React.FC = () => {
         onChange={handleChange(setMyClass, setUserClass)}
         placeholder="반을 입력하세요"
       />
-      {departments.length > 0 && (
+      {Array.isArray(SCHOOL_DDDEP_NM) && SCHOOL_DDDEP_NM.length > 0 && (
         <div>
-          <select>
-            {departments.map((dept, index) => (
-              <option key={index}>{dept.DDDEP_NM}</option>
+          <select value={selectedValue} onChange={handleSelectChange}>
+            {SCHOOL_DDDEP_NM.map((dept, index) => (
+              <option key={index}>{dept}</option>
             ))}
           </select>
         </div>

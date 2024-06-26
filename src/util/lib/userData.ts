@@ -5,6 +5,8 @@ const userData = () => {
     'SCHUL_NM',
     'ATPT_OFCDC_SC_CODE',
     'SD_SCHUL_CODE',
+    'SCHOOL_DDDEP_NM',
+    'USER_DDDEP_NM',
     'USER_GRADE',
     'USER_CLASS',
   ]);
@@ -14,9 +16,20 @@ const userData = () => {
     setCookie('ATPT_OFCDC_SC_CODE', ATPT_OFCDC_SC_CODE, { path: '/' });
     setCookie('SD_SCHUL_CODE', SD_SCHUL_CODE, { path: '/' });
   };
+
+  const getSchoolMajorData = (departmentObject: Array<string>) => {
+    const updatedDepartmentObject = ['선택안함', ...departmentObject];
+    setCookie('SCHOOL_DDDEP_NM', JSON.stringify(updatedDepartmentObject), { path: '/' });
+  };
+
+  const setUserMajorData = (DDDEP_NM: string) => {
+    setCookie('USER_DDDEP_NM', DDDEP_NM, { path: '/' });
+  };
+
   const setUserGrade = (userGrade: string) => {
     setCookie('USER_GRADE', userGrade, { path: '/' });
   };
+
   const setUserClass = (userClass: string) => {
     setCookie('USER_CLASS', userClass, { path: '/' });
   };
@@ -24,6 +37,8 @@ const userData = () => {
   return {
     cookies,
     setUserSchoolData,
+    getSchoolMajorData,
+    setUserMajorData,
     setUserGrade,
     setUserClass,
   };
