@@ -54,7 +54,7 @@ const Profile: React.FC = () => {
   };
 
   const handleSelectSchool = async (school: School) => {
-    setUserSchoolData(school.SCHUL_NM, school.ATPT_OFCDC_SC_CODE, school.SD_SCHUL_CODE);
+    setUserSchoolData(school.SCHUL_NM, school.ATPT_OFCDC_SC_CODE, school.SD_SCHUL_CODE, school.SCHUL_KND_SC_NM);
     setKeyword(school.SCHUL_NM);
     setSearchSchools([]);
     if (school.ATPT_OFCDC_SC_CODE) {

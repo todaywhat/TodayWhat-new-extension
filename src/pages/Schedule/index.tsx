@@ -1,12 +1,52 @@
-import getHigh from '@apis/Schedule/getHigh';
+import getSchedule from '@apis/Schedule/getSchedule';
 import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 
 const Schedule = () => {
   const [scheduleData, setScheduleData] = useState(null);
+  const [cookies] = useCookies([
+    'SCHUL_NM',
+    'ATPT_OFCDC_SC_CODE',
+    'SD_SCHUL_CODE',
+    'USER_DDDEP_NM',
+    'USER_GRADE',
+    'USER_CLASS',
+    'SCHUL_KND_SC_NM',
+  ]);
+  const {
+    ATPT_OFCDC_SC_CODE = '',
+    SD_SCHUL_CODE = '',
+    USER_DDDEP_NM = ' ',
+    USER_GRADE = '',
+    USER_CLASS = '',
+    SCHUL_KND_SC_NM = '',
+  } = cookies;
 
   useEffect(() => {
     const fetchScheduleData = async () => {
-      const res = await getHigh();
+      let scheduleURL;
+      switch (SCHUL_KND_SC_NM) {
+        case '고등학교':
+          scheduleURL = 'hisTimetable';
+          break;
+        case '중학교':
+          scheduleURL = 'misTimetable';
+          break;
+        case '초등학교':
+          scheduleURL = 'elsTimetable';
+          break;
+        default:
+          scheduleURL = '';
+          return;
+      }
+      const res = await getSchedule(
+        ATPT_OFCDC_SC_CODE,
+        SD_SCHUL_CODE,
+        USER_DDDEP_NM,
+        USER_GRADE,
+        USER_CLASS,
+        scheduleURL
+      );
       setScheduleData(res);
     };
 
