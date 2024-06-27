@@ -9,23 +9,19 @@ const getSchedule = async (
   scheduleURL: string,
 ) => {
   try {
-    const { data } = await axios.get(
-      `https://open.neis.go.kr/hub/${scheduleURL}`,
-      {
-        params: {
-          KEY: process.env.NEXT_PUBLIC_CLIENT_NEIS_KEY,
-          Type: 'json',
-          pIndex: 1,
-          pSize: 7,
-          ATPT_OFCDC_SC_CODE,
-          SD_SCHUL_CODE,
-          ALL_TI_YMD: 20240627,
-          USER_DDDEP_NM,
-          GRADE: USER_GRADE,
-          CLRM_NM: USER_CLASS,
-        },
+    const { data } = await axios.get(`${scheduleURL}`, {
+      params: {
+        Type: 'json',
+        pIndex: 1,
+        pSize: 7,
+        ATPT_OFCDC_SC_CODE,
+        SD_SCHUL_CODE,
+        ALL_TI_YMD: 20240627,
+        USER_DDDEP_NM,
+        GRADE: USER_GRADE,
+        CLRM_NM: USER_CLASS,
       },
-    )
+    })
     return data
   } catch (e) {
     return null
