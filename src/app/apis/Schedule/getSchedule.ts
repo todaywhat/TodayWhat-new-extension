@@ -19,7 +19,7 @@ const getSchedule = async (
           pSize: 7,
           ATPT_OFCDC_SC_CODE,
           SD_SCHUL_CODE,
-          ALL_TI_YMD: 20240626,
+          ALL_TI_YMD: 20240627,
           USER_DDDEP_NM,
           GRADE: USER_GRADE,
           CLRM_NM: USER_CLASS,
