@@ -1,27 +1,30 @@
-import axios from 'axios';
+import axios from 'axios'
 
 interface Cookies {
-  ATPT_OFCDC_SC_CODE?: string;
-  SD_SCHUL_CODE?: string;
+  ATPT_OFCDC_SC_CODE?: string
+  SD_SCHUL_CODE?: string
 }
 
 const getMeal = async (cookies: Cookies) => {
   try {
-    const { ATPT_OFCDC_SC_CODE = '', SD_SCHUL_CODE = '' } = cookies;
+    const { ATPT_OFCDC_SC_CODE = '', SD_SCHUL_CODE = '' } = cookies
 
-    const { data } = await axios.get('https://open.neis.go.kr/hub/mealServiceDietInfo', {
-      params: {
-        KEY: process.env.NEXT_PUBLIC_CLIENT_NEIS_KEY,
-        Type: 'json',
-        ATPT_OFCDC_SC_CODE,
-        SD_SCHUL_CODE,
-        MLSV_YMD: 20240621,
+    const { data } = await axios.get(
+      'https://open.neis.go.kr/hub/mealServiceDietInfo',
+      {
+        params: {
+          KEY: process.env.NEXT_PUBLIC_CLIENT_NEIS_KEY,
+          Type: 'json',
+          ATPT_OFCDC_SC_CODE,
+          SD_SCHUL_CODE,
+          MLSV_YMD: 20240627,
+        },
       },
-    });
-    return data;
+    )
+    return data
   } catch (e) {
-    return null;
+    return null
   }
-};
+}
 
-export default getMeal;
+export default getMeal
