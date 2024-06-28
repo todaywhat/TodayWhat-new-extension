@@ -41,7 +41,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      if ((keyword.trim() && !selectList) || selectList !== keyword) {
+      if (keyword.trim() && selectList !== keyword && SCHUL_NM !== keyword) {
         fetchSchools(keyword)
       } else {
         setSearchSchools([])
