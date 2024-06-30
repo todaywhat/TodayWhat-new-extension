@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@apis/*": ["./apis/*"],
+      "@page/*": ["./page/*"],
+      "@util/*": ["./util/*"]
+    }
+  }
+}

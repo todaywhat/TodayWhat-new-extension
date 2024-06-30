@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-function App() {
+import Home from './page/home'
+import Meal from './page/meal'
+import Profile from './page/profile'
+import Schedule from './page/schedule'
+
+const AppRoutes = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <MemoryRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/meal' element={<Meal />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/schedule' element={<Schedule />} />
+      </Routes>
+    </MemoryRouter>
+  )
 }
 
-export default App;
+export default AppRoutes
