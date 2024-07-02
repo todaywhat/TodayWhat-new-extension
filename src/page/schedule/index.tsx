@@ -1,11 +1,12 @@
-'use client'
-
+import DateButton from '@components/DateButton'
 import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import getSchedule from '@apis/Schedule/getSchedule'
+import { getDate } from '@util/lib/getDate'
 
 const Schedule = () => {
   const [scheduleData, setScheduleData] = useState(null)
+  const [currentDate, setCurrentDate] = useState(new Date())
   const [cookies] = useCookies([
     'SCHUL_NM',
     'ATPT_OFCDC_SC_CODE',
@@ -48,14 +49,21 @@ const Schedule = () => {
         USER_GRADE,
         USER_CLASS,
         scheduleURL,
+        currentDate,
       )
       setScheduleData(res)
     }
 
     fetchScheduleData()
-  }, [])
+  }, [currentDate])
 
-  return <p>{scheduleData ? JSON.stringify(scheduleData) : 'Loading...'}</p>
+  return (
+    <>
+      <h1>{getDate(currentDate)}</h1>
+      <DateButton currentDate={currentDate} setCurrentDate={setCurrentDate} />
+      <p>{scheduleData ? JSON.stringify(scheduleData) : 'Loading...'}</p>
+    </>
+  )
 }
 
 export default Schedule

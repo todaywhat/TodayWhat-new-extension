@@ -1,11 +1,12 @@
 import axios from 'axios'
+import { getDate } from '@util/lib/getDate'
 
 interface Cookies {
   ATPT_OFCDC_SC_CODE?: string
   SD_SCHUL_CODE?: string
 }
 
-const getMeal = async (cookies: Cookies) => {
+const getMeal = async (cookies: Cookies, currentDate: Date) => {
   try {
     const { ATPT_OFCDC_SC_CODE = '', SD_SCHUL_CODE = '' } = cookies
 
@@ -17,7 +18,7 @@ const getMeal = async (cookies: Cookies) => {
           Type: 'json',
           ATPT_OFCDC_SC_CODE,
           SD_SCHUL_CODE,
-          MLSV_YMD: 20240627,
+          MLSV_YMD: getDate(currentDate),
         },
       },
     )
