@@ -4,8 +4,12 @@ import { useCookies } from 'react-cookie'
 import getSchedule from '@apis/Schedule/getSchedule'
 import { getDate } from '@util/lib/getDate'
 
+interface scheduleData {
+  ITRT_CNTNT: string
+}
+
 const Schedule = () => {
-  const [scheduleData, setScheduleData] = useState(null)
+  const [scheduleData, setScheduleData] = useState<scheduleData[]>([])
   const [currentDate, setCurrentDate] = useState(new Date())
   const [cookies] = useCookies([
     'SCHUL_NM',
@@ -42,26 +46,43 @@ const Schedule = () => {
           scheduleURL = ''
           return
       }
-      const res = await getSchedule(
-        ATPT_OFCDC_SC_CODE,
-        SD_SCHUL_CODE,
-        USER_DDDEP_NM,
-        USER_GRADE,
-        USER_CLASS,
-        scheduleURL,
-        currentDate,
-      )
-      setScheduleData(res)
+      try {
+        const res = await getSchedule(
+          ATPT_OFCDC_SC_CODE,
+          SD_SCHUL_CODE,
+          USER_DDDEP_NM,
+          USER_GRADE,
+          USER_CLASS,
+          scheduleURL,
+          currentDate,
+        )
+        setScheduleData(res)
+      } catch (error) {
+        console.error('Error fetching schedule:', error)
+      }
     }
 
     fetchScheduleData()
-  }, [currentDate])
+  }, [
+    currentDate,
+    ATPT_OFCDC_SC_CODE,
+    SD_SCHUL_CODE,
+    USER_DDDEP_NM,
+    USER_GRADE,
+    USER_CLASS,
+    SCHUL_KND_SC_NM,
+  ])
 
   return (
     <>
       <h1>{getDate(currentDate)}</h1>
       <DateButton currentDate={currentDate} setCurrentDate={setCurrentDate} />
-      <p>{scheduleData ? JSON.stringify(scheduleData) : 'Loading...'}</p>
+      <div>
+        {scheduleData.map((schedule, index) => (
+          <div key={index}>{schedule?.ITRT_CNTNT}</div>
+        ))}
+      </div>
+      <p>{scheduleData.length === 0 ? 'Loading...' : ''}</p>
     </>
   )
 }

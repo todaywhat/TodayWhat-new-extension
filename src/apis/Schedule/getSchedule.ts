@@ -28,7 +28,7 @@ const getSchedule = async (
         },
       },
     )
-    return data
+    return data.hisTimetable?.[1]?.row || []
   } catch (e) {
     return null
   }
