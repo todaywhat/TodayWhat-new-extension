@@ -6,33 +6,21 @@ interface DateProps {
 }
 
 const DateButton: React.FC<DateProps> = ({ currentDate, setCurrentDate }) => {
-  const handleDate = (date: string) => {
-    let newDate
-    switch (date) {
-      case 'yesterday':
-        newDate = new Date(currentDate)
-        newDate.setDate(newDate.getDate() - 1)
-        setCurrentDate(newDate)
-        break
-      case 'today':
-        setCurrentDate(new Date())
-        break
-      case 'tomorrow':
-        newDate = new Date(currentDate)
-        newDate.setDate(newDate.getDate() + 1)
-        setCurrentDate(newDate)
-        break
-      default:
-        setCurrentDate(new Date())
-        break
+  const handleDate = (date: number) => {
+    if (date === 0) {
+      setCurrentDate(new Date())
+    } else {
+      const newDate = new Date(currentDate)
+      newDate.setDate(newDate.getDate() + date)
+      setCurrentDate(newDate)
     }
   }
 
   return (
     <>
-      <button onClick={() => handleDate('yesterday')}>전날</button>
-      <button onClick={() => handleDate('today')}>현재</button>
-      <button onClick={() => handleDate('tomorrow')}>다음날</button>
+      <button onClick={() => handleDate(-1)}>전날</button>
+      <button onClick={() => handleDate(0)}>현재</button>
+      <button onClick={() => handleDate(+1)}>다음날</button>
     </>
   )
 }
