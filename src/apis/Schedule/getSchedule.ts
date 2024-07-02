@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getDate } from '@util/lib/getDate'
 
 const getSchedule = async (
   ATPT_OFCDC_SC_CODE: string,
@@ -7,6 +8,7 @@ const getSchedule = async (
   USER_GRADE: string,
   USER_CLASS: string,
   scheduleURL: string,
+  currentDate: Date,
 ) => {
   try {
     const { data } = await axios.get(
@@ -19,7 +21,7 @@ const getSchedule = async (
           pSize: 7,
           ATPT_OFCDC_SC_CODE,
           SD_SCHUL_CODE,
-          ALL_TI_YMD: 20240627,
+          ALL_TI_YMD: getDate(currentDate),
           USER_DDDEP_NM,
           GRADE: USER_GRADE,
           CLRM_NM: USER_CLASS,

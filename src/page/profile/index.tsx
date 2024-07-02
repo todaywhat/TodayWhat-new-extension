@@ -7,14 +7,6 @@ import getSchool from '@apis/Profile/getSchool'
 import useUserData from '@util/lib/userData'
 
 const Profile: React.FC = () => {
-  const [searchSchools, setSearchSchools] = useState<School[]>([])
-  const {
-    setUserSchoolData,
-    setUserGrade,
-    setUserClass,
-    getSchoolMajorData,
-    setUserMajorData,
-  } = useUserData()
   const [cookies] = useCookies([
     'SCHUL_NM',
     'USER_GRADE',
@@ -24,6 +16,7 @@ const Profile: React.FC = () => {
     'SCHOOL_DDDEP_NM',
     'USER_DDDEP_NM',
   ])
+
   const {
     SCHUL_NM = '',
     USER_GRADE = '',
@@ -31,15 +24,24 @@ const Profile: React.FC = () => {
     SCHOOL_DDDEP_NM = [],
     USER_DDDEP_NM = '',
   } = cookies
+
   const [keyword, setKeyword] = useState<string>(SCHUL_NM)
   const [grade, setGrade] = useState<string>(USER_GRADE)
   const [myClass, setMyClass] = useState<string>(USER_CLASS)
   const [selectMajor, setSelectMajor] = useState<string>(USER_DDDEP_NM)
-  const [selectList, setSelectList] = useState<string | null>(null)
+  const [searchSchools, setSearchSchools] = useState<School[]>([])
+
+  const {
+    setUserSchoolData,
+    setUserGrade,
+    setUserClass,
+    getSchoolMajorData,
+    setUserMajorData,
+  } = useUserData()
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      if (keyword.trim() && selectList !== keyword && SCHUL_NM !== keyword) {
+      if (keyword.trim() && SCHUL_NM !== keyword) {
         fetchSchools(keyword)
       } else {
         setSearchSchools([])
@@ -47,24 +49,27 @@ const Profile: React.FC = () => {
     }, 300)
 
     return () => clearTimeout(delayDebounceFn)
-  }, [keyword])
+  }, [keyword, SCHUL_NM])
 
   const handleChange =
     (
       setter: React.Dispatch<React.SetStateAction<string>>,
-      userDataSetter: (value: string) => void,
+      userDataSetter?: (value: string) => void,
     ) =>
     (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
       setter(value)
-      userDataSetter(value)
+      if (userDataSetter) {
+        userDataSetter(value)
+      }
     }
 
   const fetchSchools = async (searchKeyword: string) => {
     try {
       const data = await getSchool(searchKeyword)
       setSearchSchools(data && data.length > 0 ? data : [])
-    } catch {
+    } catch (error) {
+      console.error('Failed to fetch schools:', error)
       setSearchSchools([])
     }
   }
@@ -77,10 +82,13 @@ const Profile: React.FC = () => {
       school.SCHUL_KND_SC_NM,
     )
     setKeyword(school.SCHUL_NM)
-    setSelectList(school.SCHUL_NM)
     setSearchSchools([])
     if (school.ATPT_OFCDC_SC_CODE) {
-      fetchDepartments(school.ATPT_OFCDC_SC_CODE, school.SD_SCHUL_CODE)
+      const departments = await fetchDepartments(
+        school.ATPT_OFCDC_SC_CODE,
+        school.SD_SCHUL_CODE,
+      )
+      getSchoolMajorData(departments)
     }
   }
 
@@ -92,14 +100,12 @@ const Profile: React.FC = () => {
     setSelectMajor('선택안함')
     try {
       const data = await getDepartment(ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE)
-      if (data && data.length > 0) {
-        const departmentNames = data.map((dept: Department) => dept.DDDEP_NM)
-        getSchoolMajorData(departmentNames)
-      } else {
-        getSchoolMajorData([])
-      }
+      return data && data.length > 0
+        ? data.map((dept: Department) => dept.DDDEP_NM)
+        : []
     } catch (error) {
-      getSchoolMajorData([])
+      console.error('Failed to fetch departments:', error)
+      return []
     }
   }
 
@@ -115,7 +121,7 @@ const Profile: React.FC = () => {
         <input
           type='text'
           value={keyword}
-          onChange={handleChange(setKeyword, () => {})}
+          onChange={handleChange(setKeyword)}
           placeholder='학교 이름을 입력하세요'
         />
         {searchSchools.length > 0 && (
@@ -147,7 +153,9 @@ const Profile: React.FC = () => {
         <div>
           <select value={selectMajor} onChange={handleSelectChange}>
             {SCHOOL_DDDEP_NM.map((dept, index) => (
-              <option key={index}>{dept}</option>
+              <option key={index} value={dept}>
+                {dept}
+              </option>
             ))}
           </select>
         </div>
