@@ -22,7 +22,7 @@ const getMeal = async (cookies: Cookies, currentDate: Date) => {
         },
       },
     )
-    return data
+    return data.mealServiceDietInfo?.[1]?.row || []
   } catch (e) {
     return null
   }
