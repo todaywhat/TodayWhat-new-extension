@@ -1,40 +1,34 @@
 import DateButton from '@components/DateButton'
 import MealButton from '@components/MealButton'
-import { useEffect, useMemo, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
+import { Link } from 'react-router-dom'
 import getMeal from '@apis/Meal/getMeal'
 import { getDate } from '@util/lib/getDate'
 
-interface MealData {
-  DDISH_NM: string
-}
-
 const Meal = () => {
-  const [schoolData, setSchoolData] = useState<MealData[] | null>(null)
   const [cookies] = useCookies(['ATPT_OFCDC_SC_CODE', 'SD_SCHUL_CODE'])
   const [currentDate, setCurrentDate] = useState(new Date())
   const [mealNumber, setMealNumber] = useState<number>(0)
 
-  useEffect(() => {
-    const fetchSchoolData = async () => {
-      const res = await getMeal(cookies, currentDate)
-      setSchoolData(res)
-    }
-
-    fetchSchoolData()
-  }, [currentDate])
+  const { data } = useQuery({
+    queryKey: ['mealData', currentDate],
+    queryFn: () => getMeal(cookies, currentDate),
+    staleTime: 5 * 60 * 1000,
+  })
 
   const mealData: string[] | 'loading...' = useMemo(() => {
-    if (schoolData) {
+    if (data) {
       return (
-        schoolData[mealNumber]?.DDISH_NM.replace(
+        data[mealNumber]?.DDISH_NM.replace(
           /\([ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]*\)|[*<br/>a-z.() ]/g,
           '`',
         ).split('`') || ['급식이 없습니다.']
       )
     }
     return 'loading...'
-  }, [mealNumber, schoolData])
+  }, [mealNumber, data])
 
   return (
     <>
@@ -50,6 +44,7 @@ const Meal = () => {
           ))
         )}
       </div>
+      <Link to='/'>돌아가기</Link>
     </>
   )
 }
