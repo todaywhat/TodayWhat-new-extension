@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
+import { Link } from 'react-router-dom'
 import { Department } from 'types/department'
 import { School } from 'types/school'
 import getDepartment from '@apis/Profile/getDepartment'
@@ -160,6 +161,7 @@ const Profile: React.FC = () => {
           </select>
         </div>
       )}
+      <Link to='/'>돌아가기</Link>
     </>
   )
 }
