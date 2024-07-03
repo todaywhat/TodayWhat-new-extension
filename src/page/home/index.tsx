@@ -10,6 +10,8 @@ const Home = () => {
       <br />
       <button onClick={() => navigate('/schedule')}>시간표</button>
       <br />
+      <button onClick={() => navigate('/allergy')}>알러지</button>
+      <br />
     </>
   )
 }

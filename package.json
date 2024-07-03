@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
+    "@types/chrome": "^0.0.268",
     "@types/react-query": "^1.2.9",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.14.1",
