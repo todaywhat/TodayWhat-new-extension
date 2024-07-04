@@ -6,11 +6,15 @@ import { useCookies } from 'react-cookie'
 import { Link } from 'react-router-dom'
 import getMeal from '@apis/Meal/getMeal'
 import { getDate } from '@util/lib/getDate'
+import { useGetAllergy } from '../../hook/useGetAllergy'
 
 const Meal = () => {
   const [cookies] = useCookies(['ATPT_OFCDC_SC_CODE', 'SD_SCHUL_CODE'])
   const [currentDate, setCurrentDate] = useState(new Date())
   const [mealNumber, setMealNumber] = useState<number>(0)
+  const [selectedAllergies, setSelectedAllergies] = useState<number[]>([])
+
+  useGetAllergy(setSelectedAllergies)
 
   const { data } = useQuery({
     queryKey: ['mealData', currentDate],
@@ -33,6 +37,7 @@ const Meal = () => {
   return (
     <>
       <h1>{getDate(currentDate)}</h1>
+      <h2>{selectedAllergies}</h2>
       <DateButton currentDate={currentDate} setCurrentDate={setCurrentDate} />
       <MealButton setMealNumber={setMealNumber} />
       <div>

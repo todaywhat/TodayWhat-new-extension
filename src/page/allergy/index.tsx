@@ -1,24 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AllergyType } from 'types/allergy'
+import { useGetAllergy } from '../../hook/useGetAllergy'
 import { allergyMock } from '../../mocks/allergyMock'
 
 const Allergy = () => {
   const [selectedAllergies, setSelectedAllergies] = useState<number[]>([])
 
-  useEffect(() => {
-    if (typeof chrome !== 'undefined' && chrome.storage) {
-      chrome.storage.sync.get('selectedAllergies', (result) => {
-        if (result.selectedAllergies) {
-          setSelectedAllergies(result.selectedAllergies)
-        }
-      })
-    } else {
-      const localData = localStorage.getItem('selectedAllergies')
-      if (localData) {
-        setSelectedAllergies(JSON.parse(localData))
-      }
-    }
-  }, [])
+  useGetAllergy(setSelectedAllergies)
 
   const handleClick = (id: number) => {
     const isSelected = selectedAllergies.includes(id)
@@ -43,9 +31,9 @@ const Allergy = () => {
       {allergyMock.map((allergy: AllergyType) => (
         <div
           style={{
-            backgroundColor: selectedAllergies.includes(allergy.id)
-              ? 'red'
-              : 'blue',
+            border: selectedAllergies.includes(allergy.id)
+              ? '2px solid black'
+              : 'none',
             marginBottom: '10px',
             cursor: 'pointer',
           }}
