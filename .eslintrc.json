@@ -13,19 +13,12 @@
     "plugin:storybook/recommended"
   ],
   "parser": "@typescript-eslint/parser",
-  "ignorePatterns": [
-    "node_modules/**",
-    "**/dist/**"
-  ],
+  "ignorePatterns": ["node_modules/**", "**/dist/**"],
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "import"
-  ],
+  "plugins": ["react", "@typescript-eslint", "import"],
   "settings": {
     "react": {
       "version": "detect"
@@ -33,30 +26,12 @@
     "import/resolver": {
       "alias": {
         "map": [
-          [
-            "@apis",
-            "./src/apis"
-          ],
-          [
-            "@page",
-            "./src/page"
-          ],
-          [
-            "@types",
-            "./src/types"
-          ],
-          [
-            "@util",
-            "./src/util"
-          ]
+          ["@apis", "./src/apis"],
+          ["@page", "./src/page"],
+          ["@types", "./src/types"],
+          ["@util", "./src/util"]
         ],
-        "extensions": [
-          ".ts",
-          ".tsx",
-          ".js",
-          ".jsx",
-          ".json"
-        ]
+        "extensions": [".ts", ".tsx", ".js", ".jsx", ".json"]
       }
     }
   },
@@ -64,11 +39,7 @@
     "no-console": [
       "error",
       {
-        "allow": [
-          "warn",
-          "error",
-          "info"
-        ]
+        "allow": ["warn", "error", "info"]
       }
     ],
     "@typescript-eslint/no-empty-interface": "off",
@@ -114,6 +85,7 @@
       {
         "patterns": []
       }
-    ]
+    ],
+    "react/prop-types": "off"
   }
 }
