@@ -5,7 +5,7 @@ interface Props {
   location?: string
 }
 
-const List: React.FC<Props> = ({ school, location, ...props }) => {
+const SearchList: React.FC<Props> = ({ school, location, ...props }) => {
   return (
     <S.Wrapper {...props}>
       <S.SchoolName>{school}</S.SchoolName>
@@ -14,4 +14,4 @@ const List: React.FC<Props> = ({ school, location, ...props }) => {
   )
 }
 
-export default List
+export default SearchList
