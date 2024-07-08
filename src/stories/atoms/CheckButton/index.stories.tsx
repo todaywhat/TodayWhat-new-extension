@@ -12,4 +12,4 @@ export default config
 
 type Story = StoryObj<typeof CheckButton>
 
-export const Primary: Story = { args: { text: '확인' } }
+export const Primary: Story = { args: { text: '확인!', isActive: true } }
