@@ -1,11 +1,11 @@
 import React, { useState, ChangeEvent, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
+import { Link } from 'react-router-dom'
 import { Department } from 'types/department'
 import { School } from 'types/school'
 import getDepartment from '@apis/Profile/getDepartment'
 import getSchool from '@apis/Profile/getSchool'
 import useUserData from '@util/lib/userData'
-import * as S from './style'
 
 const Profile: React.FC = () => {
   const [cookies] = useCookies([
@@ -117,7 +117,7 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <S.Wrapper>
+    <>
       <div>
         <input
           type='text'
@@ -161,22 +161,9 @@ const Profile: React.FC = () => {
           </select>
         </div>
       )}
-    </S.Wrapper>
+      <Link to='/'>돌아가기</Link>
+    </>
   )
 }
 
 export default Profile
-
-// <S.Wrapper>
-//       <S.Header>
-//         <Logo />
-//         <Return />
-//       </S.Header>
-//       <S.InputContainer>
-//         <Select category='학과' />
-//         <Input value={myClass} setValue={setMyClass} category='반' />
-//         <Input value={grade} setValue={setGrade} category='학년' />
-//         <Input value={keyword} setValue={setKeyword} category='학교이름' />
-//       </S.InputContainer>
-//       <CheckButton text='확인!' />
-//     </S.Wrapper>
