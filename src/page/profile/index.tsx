@@ -5,6 +5,11 @@ import { School } from 'types/school'
 import getDepartment from '@apis/Profile/getDepartment'
 import getSchool from '@apis/Profile/getSchool'
 import useUserData from '@util/lib/userData'
+import Input from '../../stories/atoms/Input'
+import Logo from '../../stories/atoms/Logo'
+import Return from '../../stories/atoms/Return'
+import SearchList from '../../stories/atoms/SearchList'
+import Select from '../../stories/atoms/Select'
 import * as S from './style'
 
 const Profile: React.FC = () => {
@@ -110,73 +115,52 @@ const Profile: React.FC = () => {
     }
   }
 
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value
-    setSelectMajor(value)
-    setUserMajorData(value)
-  }
-
   return (
     <S.Wrapper>
-      <div>
-        <input
-          type='text'
-          value={keyword}
-          onChange={handleChange(setKeyword)}
-          placeholder='학교 이름을 입력하세요'
+      <S.Header>
+        <Logo />
+        <Return />
+      </S.Header>
+      <Input
+        setValue={setKeyword}
+        category='학교이름'
+        value={keyword}
+        inputChange={handleChange(setKeyword)}
+        placeholder='학교이름을 입력해주세요.'
+      />
+      {searchSchools.length > 0 &&
+        searchSchools.map((school) => (
+          <SearchList
+            onclick={() => handleSelectSchool(school)}
+            key={school.SCHUL_NM}
+            school={school.SCHUL_NM}
+            location={school.ORG_RDNMA}
+          />
+        ))}
+      {Array.isArray(SCHOOL_DDDEP_NM) && SCHOOL_DDDEP_NM.length > 0 && (
+        <Select
+          cookie={setUserMajorData}
+          value={selectMajor}
+          setValue={setSelectMajor}
+          category='학과'
+          data={SCHOOL_DDDEP_NM}
         />
-        {searchSchools.length > 0 && (
-          <ul>
-            {searchSchools.map((school) => (
-              <li
-                key={school.SCHUL_NM}
-                onClick={() => handleSelectSchool(school)}
-              >
-                {school.SCHUL_NM}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <input
-        type='text'
+      )}
+      <Input
+        setValue={setGrade}
         value={grade}
-        onChange={handleChange(setGrade, setUserGrade)}
+        category='학년'
+        inputChange={handleChange(setGrade, setUserGrade)}
         placeholder='학년을 입력하세요'
       />
-      <input
-        type='text'
+      <Input
+        setValue={setMyClass}
         value={myClass}
-        onChange={handleChange(setMyClass, setUserClass)}
-        placeholder='반을 입력하세요'
+        category='반'
+        inputChange={handleChange(setMyClass, setUserClass)}
       />
-      {Array.isArray(SCHOOL_DDDEP_NM) && SCHOOL_DDDEP_NM.length > 0 && (
-        <div>
-          <select value={selectMajor} onChange={handleSelectChange}>
-            {SCHOOL_DDDEP_NM.map((dept, index) => (
-              <option key={index} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
     </S.Wrapper>
   )
 }
 
 export default Profile
-
-// <S.Wrapper>
-//       <S.Header>
-//         <Logo />
-//         <Return />
-//       </S.Header>
-//       <S.InputContainer>
-//         <Select category='학과' />
-//         <Input value={myClass} setValue={setMyClass} category='반' />
-//         <Input value={grade} setValue={setGrade} category='학년' />
-//         <Input value={keyword} setValue={setKeyword} category='학교이름' />
-//       </S.InputContainer>
-//       <CheckButton text='확인!' />
-//     </S.Wrapper>

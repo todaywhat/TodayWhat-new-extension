@@ -5,7 +5,13 @@ const config: Meta<typeof Select> = {
   title: 'Select',
   component: Select,
 
-  args: {},
+  args: {
+    category: '학교이름',
+    data: ['옵션1', '옵션2', '옵션3'],
+    value: '옵션1',
+    setValue: () => {},
+    cookie: () => {},
+  },
 }
 
 export default config
