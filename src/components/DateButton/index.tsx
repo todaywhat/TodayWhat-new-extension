@@ -1,27 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
+import TimeButton from '../../stories/atoms/TimeButton'
+import * as S from './style'
 
 interface DateProps {
-  currentDate: Date
   setCurrentDate: React.Dispatch<React.SetStateAction<Date>>
 }
 
-const DateButton: React.FC<DateProps> = ({ currentDate, setCurrentDate }) => {
-  const handleDate = (date: number) => {
-    if (date === 0) {
-      setCurrentDate(new Date())
-    } else {
-      const newDate = new Date(currentDate)
-      newDate.setDate(newDate.getDate() + date)
-      setCurrentDate(newDate)
+const DateButton: React.FC<DateProps> = ({ setCurrentDate }) => {
+  const [selectedButton, setSelectedButton] = useState('오늘')
+
+  const handleDateButtonClick = (days: number, buttonText: string) => {
+    if (selectedButton === buttonText) {
+      return
     }
+
+    const today = new Date()
+    today.setDate(today.getDate() + days)
+    setCurrentDate(today)
+    setSelectedButton(buttonText)
+  }
+
+  const renderTimeButton = (text: string, days: number) => {
+    return (
+      <TimeButton
+        text={text}
+        onClick={() => handleDateButtonClick(days, text)}
+        selected={selectedButton === text}
+      />
+    )
   }
 
   return (
-    <>
-      <button onClick={() => handleDate(-1)}>전날</button>
-      <button onClick={() => handleDate(0)}>현재</button>
-      <button onClick={() => handleDate(+1)}>다음날</button>
-    </>
+    <S.Wrapper>
+      {renderTimeButton('어제', -1)}
+      {renderTimeButton('오늘', 0)}
+      {renderTimeButton('내일', 1)}
+    </S.Wrapper>
   )
 }
 

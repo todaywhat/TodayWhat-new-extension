@@ -38,7 +38,7 @@ const Meal = () => {
     <>
       <h1>{getDate(currentDate)}</h1>
       <h2>{selectedAllergies}</h2>
-      <DateButton currentDate={currentDate} setCurrentDate={setCurrentDate} />
+      <DateButton setCurrentDate={setCurrentDate} />
       <MealButton setMealNumber={setMealNumber} />
       <div>
         {mealData === 'loading...' ? (
