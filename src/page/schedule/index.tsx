@@ -1,14 +1,16 @@
 import DateButton from '@components/DateButton'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useCookies } from 'react-cookie'
-import { Link } from 'react-router-dom'
 import { ScheduleData } from 'types/schedule'
 import getSchedule from '@apis/Schedule/getSchedule'
-import { getDate } from '@util/lib/getDate'
+import Logo from '../../stories/atoms/Logo'
+import Return from '../../stories/atoms/Return'
+import ScheduleList from '../../stories/atoms/ScheduleList'
+import getScheduleURL from '../../util/lib/getScheduleURL'
+import * as S from './style'
 
 const Schedule = () => {
-  // const [scheduleData, setScheduleData] = useState<scheduleData[]>([])
   const [currentDate, setCurrentDate] = useState(new Date())
   const [cookies] = useCookies([
     'SCHUL_NM',
@@ -28,23 +30,7 @@ const Schedule = () => {
     SCHUL_KND_SC_NM = '',
   } = cookies
 
-  let scheduleURL = ''
-  useEffect(() => {
-    switch (SCHUL_KND_SC_NM) {
-      case '고등학교':
-        scheduleURL = 'hisTimetable'
-        break
-      case '중학교':
-        scheduleURL = 'misTimetable'
-        break
-      case '초등학교':
-        scheduleURL = 'elsTimetable'
-        break
-      default:
-        scheduleURL = ''
-        return
-    }
-  }, [currentDate])
+  const scheduleURL = getScheduleURL(SCHUL_KND_SC_NM)
 
   const { data } = useQuery<ScheduleData[]>({
     queryKey: ['scheduleData', currentDate],
@@ -62,17 +48,24 @@ const Schedule = () => {
   })
 
   return (
-    <>
-      <h1>{getDate(currentDate)}</h1>
-      <DateButton currentDate={currentDate} setCurrentDate={setCurrentDate} />
-      <div>
+    <S.Wrapper>
+      <S.NavContainer>
+        <S.Header>
+          <Logo />
+          <Return />
+        </S.Header>
+        <DateButton setCurrentDate={setCurrentDate} />
+      </S.NavContainer>
+      <S.ScheduleContiner>
         {data?.map((schedule: ScheduleData, index: number) => (
-          <div key={index}>{schedule?.ITRT_CNTNT}</div>
+          <ScheduleList
+            key={index}
+            time={`${index + 1}교시`}
+            subject={schedule?.ITRT_CNTNT}
+          />
         ))}
-      </div>
-      <p>{data?.length === 0 ? 'Loading...' : ''}</p>
-      <Link to='/'>돌아가기</Link>
-    </>
+      </S.ScheduleContiner>
+    </S.Wrapper>
   )
 }
 

@@ -1,12 +1,15 @@
+import React from 'react'
 import * as S from './style'
 
 interface Props {
-  text?: string
+  text: string
+  onClick?: () => void
+  selected?: boolean
 }
 
-const TimeButton: React.FC<Props> = ({ text, ...props }) => {
+const TimeButton: React.FC<Props> = ({ text, onClick, selected, ...props }) => {
   return (
-    <S.Wrapper {...props}>
+    <S.Wrapper onClick={onClick} selected={selected} {...props}>
       <S.Text>{text}</S.Text>
     </S.Wrapper>
   )
