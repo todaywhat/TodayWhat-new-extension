@@ -53,20 +53,21 @@ export const Icon = styled.div`
 
 export const OptionWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  max-height: 240px;
+  overflow-y: auto;
   width: 21.4375rem;
   padding: 1.5rem;
-  flex-direction: column;
   align-items: flex-start;
-
   border-radius: 0.75rem;
   background: #fff;
-  box-shadow: 0px 0.125rem 0.5rem 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0rem 0.125rem 0.5rem 0rem rgba(0, 0, 0, 0.2);
 `
 
 export const Option = styled.div<{ isLast: boolean }>`
   display: flex;
-  width: 18.4375rem;
-  height: 3.3125rem;
+  width: 100%;
+  min-height: 3.3125rem;
   justify-content: space-between;
   align-items: center;
   ${(props) => !props.isLast && 'border-bottom: 0.0625rem solid #e9e9e9;'}

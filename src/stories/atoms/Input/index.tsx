@@ -14,7 +14,7 @@ interface Props
 }
 
 const Input: React.FC<Props> = ({
-  value,
+  value = '',
   setValue,
   category,
   inputChange,
@@ -33,9 +33,7 @@ const Input: React.FC<Props> = ({
         <S.Input
           {...props}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => {
-            setIsFocused(false)
-          }}
+          onBlur={() => setIsFocused(false)}
           onChange={inputChange}
           value={value}
         />

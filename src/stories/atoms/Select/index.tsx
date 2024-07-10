@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import DRadio from '../../assets/svg/DRadio'
 import Radio from '../../assets/svg/Radio'
 import Down from '../../icons/Down'
@@ -11,6 +10,8 @@ interface Props {
   cookie: (value: string) => void
   setValue: (value: string) => void
   value: string
+  isOpen: boolean
+  setIsOpen: (value: boolean) => void
 }
 
 const Select: React.FC<Props> = ({
@@ -19,10 +20,10 @@ const Select: React.FC<Props> = ({
   setValue,
   category,
   data,
+  isOpen,
+  setIsOpen,
   ...props
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
-
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
