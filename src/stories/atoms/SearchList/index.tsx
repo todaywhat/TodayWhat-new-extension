@@ -1,13 +1,18 @@
 import * as S from './style'
 
-interface Props {
-  school?: string
-  location?: string
+interface SearchListProps {
+  onclick: () => void
+  school: string
+  location: string
 }
 
-const SearchList: React.FC<Props> = ({ school, location, ...props }) => {
+const SearchList: React.FC<SearchListProps> = ({
+  onclick,
+  school,
+  location,
+}) => {
   return (
-    <S.Wrapper {...props}>
+    <S.Wrapper onClick={onclick}>
       <S.SchoolName>{school}</S.SchoolName>
       <S.Location>{location}</S.Location>
     </S.Wrapper>

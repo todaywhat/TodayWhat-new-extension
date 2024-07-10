@@ -8,15 +8,19 @@ interface Props
     HTMLInputElement
   > {
   category: string
+  value: string
+  setValue: React.Dispatch<React.SetStateAction<string>>
+  inputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const Input: React.FC<Props> = ({ category, ...props }) => {
+const Input: React.FC<Props> = ({
+  value = '',
+  setValue,
+  category,
+  inputChange,
+  ...props
+}) => {
   const [isFocused, setIsFocused] = useState<boolean>(false)
-  const [value, setValue] = useState<string>('')
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-  }
 
   const resetHandler = () => {
     setValue('')
@@ -29,10 +33,8 @@ const Input: React.FC<Props> = ({ category, ...props }) => {
         <S.Input
           {...props}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => {
-            setIsFocused(false)
-          }}
-          onChange={onChange}
+          onBlur={() => setIsFocused(false)}
+          onChange={inputChange}
           value={value}
         />
         <S.Icon>

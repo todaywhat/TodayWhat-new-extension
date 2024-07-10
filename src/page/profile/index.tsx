@@ -1,11 +1,15 @@
-import React, { useState, ChangeEvent, useEffect } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import { useCookies } from 'react-cookie'
-import { Link } from 'react-router-dom'
-import { Department } from 'types/department'
 import { School } from 'types/school'
-import getDepartment from '@apis/Profile/getDepartment'
-import getSchool from '@apis/Profile/getSchool'
 import useUserData from '@util/lib/userData'
+import useFetchDepartments from '../../hook/useFetchDepartments'
+import useFetchSchools from '../../hook/useFetchSchools'
+import Input from '../../stories/atoms/Input'
+import Logo from '../../stories/atoms/Logo'
+import Return from '../../stories/atoms/Return'
+import SearchList from '../../stories/atoms/SearchList'
+import Select from '../../stories/atoms/Select'
+import * as S from './style'
 
 const Profile: React.FC = () => {
   const [cookies] = useCookies([
@@ -31,26 +35,13 @@ const Profile: React.FC = () => {
   const [myClass, setMyClass] = useState<string>(USER_CLASS)
   const [selectMajor, setSelectMajor] = useState<string>(USER_DDDEP_NM)
   const [searchSchools, setSearchSchools] = useState<School[]>([])
+  const [isOpen, setIsOpen] = useState(false)
 
-  const {
-    setUserSchoolData,
-    setUserGrade,
-    setUserClass,
-    getSchoolMajorData,
-    setUserMajorData,
-  } = useUserData()
+  const { setUserSchoolData, setUserGrade, setUserClass, setUserMajorData } =
+    useUserData()
 
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (keyword.trim() && SCHUL_NM !== keyword) {
-        fetchSchools(keyword)
-      } else {
-        setSearchSchools([])
-      }
-    }, 300)
-
-    return () => clearTimeout(delayDebounceFn)
-  }, [keyword, SCHUL_NM])
+  useFetchSchools(keyword, SCHUL_NM, setSearchSchools)
+  const fetchDepartments = useFetchDepartments()
 
   const handleChange =
     (
@@ -65,16 +56,6 @@ const Profile: React.FC = () => {
       }
     }
 
-  const fetchSchools = async (searchKeyword: string) => {
-    try {
-      const data = await getSchool(searchKeyword)
-      setSearchSchools(data && data.length > 0 ? data : [])
-    } catch (error) {
-      console.error('Failed to fetch schools:', error)
-      setSearchSchools([])
-    }
-  }
-
   const handleSelectSchool = async (school: School) => {
     setUserSchoolData(
       school.SCHUL_NM,
@@ -85,84 +66,74 @@ const Profile: React.FC = () => {
     setKeyword(school.SCHUL_NM)
     setSearchSchools([])
     if (school.ATPT_OFCDC_SC_CODE) {
-      const departments = await fetchDepartments(
+      fetchDepartments(
         school.ATPT_OFCDC_SC_CODE,
         school.SD_SCHUL_CODE,
+        setSelectMajor,
       )
-      getSchoolMajorData(departments)
     }
-  }
-
-  const fetchDepartments = async (
-    ATPT_OFCDC_SC_CODE: string,
-    SD_SCHUL_CODE: string,
-  ) => {
-    setUserMajorData('선택안함')
-    setSelectMajor('선택안함')
-    try {
-      const data = await getDepartment(ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE)
-      return data && data.length > 0
-        ? data.map((dept: Department) => dept.DDDEP_NM)
-        : []
-    } catch (error) {
-      console.error('Failed to fetch departments:', error)
-      return []
-    }
-  }
-
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value
-    setSelectMajor(value)
-    setUserMajorData(value)
   }
 
   return (
-    <>
-      <div>
-        <input
-          type='text'
-          value={keyword}
-          onChange={handleChange(setKeyword)}
-          placeholder='학교 이름을 입력하세요'
-        />
-        {searchSchools.length > 0 && (
-          <ul>
-            {searchSchools.map((school) => (
-              <li
+    <S.Wrapper>
+      <S.Header>
+        <Logo />
+        <Return />
+      </S.Header>
+      <S.InputContainer>
+        <S.SearchContiner>
+          <Input
+            setValue={setKeyword}
+            category='학교이름'
+            value={keyword}
+            inputChange={handleChange(setKeyword)}
+            placeholder='학교이름을 입력해주세요.'
+          />
+          {searchSchools.length > 0 &&
+            searchSchools.map((school) => (
+              <SearchList
+                onclick={() => handleSelectSchool(school)}
                 key={school.SCHUL_NM}
-                onClick={() => handleSelectSchool(school)}
-              >
-                {school.SCHUL_NM}
-              </li>
+                school={school.SCHUL_NM}
+                location={school.ORG_RDNMA}
+              />
             ))}
-          </ul>
+        </S.SearchContiner>
+        {searchSchools.length === 0 && (
+          <>
+            {Array.isArray(SCHOOL_DDDEP_NM) && SCHOOL_DDDEP_NM.length > 0 && (
+              <Select
+                cookie={setUserMajorData}
+                value={selectMajor}
+                setValue={setSelectMajor}
+                category='학과'
+                data={SCHOOL_DDDEP_NM}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+              />
+            )}
+            {!isOpen && (
+              <>
+                <Input
+                  setValue={setGrade}
+                  value={grade}
+                  category='학년'
+                  inputChange={handleChange(setGrade, setUserGrade)}
+                  placeholder='학년을 입력하세요'
+                />
+                <Input
+                  setValue={setMyClass}
+                  value={myClass}
+                  category='반'
+                  inputChange={handleChange(setMyClass, setUserClass)}
+                  placeholder='반을 입력해주세요.'
+                />
+              </>
+            )}
+          </>
         )}
-      </div>
-      <input
-        type='text'
-        value={grade}
-        onChange={handleChange(setGrade, setUserGrade)}
-        placeholder='학년을 입력하세요'
-      />
-      <input
-        type='text'
-        value={myClass}
-        onChange={handleChange(setMyClass, setUserClass)}
-        placeholder='반을 입력하세요'
-      />
-      {Array.isArray(SCHOOL_DDDEP_NM) && SCHOOL_DDDEP_NM.length > 0 && (
-        <div>
-          <select value={selectMajor} onChange={handleSelectChange}>
-            {SCHOOL_DDDEP_NM.map((dept, index) => (
-              <option key={index} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-      <Link to='/'>돌아가기</Link>
-    </>
+      </S.InputContainer>
+    </S.Wrapper>
   )
 }
 

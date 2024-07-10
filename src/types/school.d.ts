@@ -6,4 +6,5 @@ export interface School {
   ADDR: string
   ORG_TELNO: string
   HMPG_ADRES: string
+  ORG_RDNMA: string
 }

@@ -25,9 +25,10 @@ export const InputWrapper = styled.label<InputWrapperProps>`
   align-items: center;
   border-radius: 0.5rem;
   background-color: ${Theme.INPUT_BACKGROUND};
+  border: 1px solid transparent;
 
-  &:focus {
-    border: 1px solid ${({ isFocused }) => (isFocused ? '#000' : 'none')};
+  &:focus-within {
+    border: 1px solid ${({ isFocused }) => (isFocused ? '#000' : 'transparent')};
   }
 `
 
