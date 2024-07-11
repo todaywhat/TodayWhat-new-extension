@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AllergyType } from 'types/allergy'
-import { useGetAllergy } from '../../hook/useGetAllergy'
+import { useGetAllergy } from '../../hook/profile/useGetAllergy'
 import { allergyMock } from '../../mocks/allergyMock'
 
 const Allergy = () => {

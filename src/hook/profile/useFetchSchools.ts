@@ -24,7 +24,6 @@ const useFetchSchools = (
       const data = await getSchool(searchKeyword)
       setSearchSchools(data && data.length > 0 ? data : [])
     } catch (error) {
-      console.error('Failed to fetch schools:', error)
       setSearchSchools([])
     }
   }

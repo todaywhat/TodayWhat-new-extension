@@ -1,9 +1,9 @@
-import React, { useState, ChangeEvent } from 'react'
-import { useCookies } from 'react-cookie'
+import React, { useState, ChangeEvent, useEffect } from 'react'
 import { School } from 'types/school'
 import useUserData from '@util/lib/userData'
-import useFetchDepartments from '../../hook/useFetchDepartments'
-import useFetchSchools from '../../hook/useFetchSchools'
+import useProfileCookie from '../../hook/cookie/useProfileCookie'
+import useFetchDepartments from '../../hook/profile/useFetchDepartments'
+import useFetchSchools from '../../hook/profile/useFetchSchools'
 import Input from '../../stories/atoms/Input'
 import Logo from '../../stories/atoms/Logo'
 import Return from '../../stories/atoms/Return'
@@ -12,28 +12,14 @@ import Select from '../../stories/atoms/Select'
 import * as S from './style'
 
 const Profile: React.FC = () => {
-  const [cookies] = useCookies([
-    'SCHUL_NM',
-    'USER_GRADE',
-    'USER_CLASS',
-    'ATPT_OFCDC_SC_CODE',
-    'SD_SCHUL_CODE',
-    'SCHOOL_DDDEP_NM',
-    'USER_DDDEP_NM',
-  ])
+  const cookies = useProfileCookie()
+  const { SCHUL_NM, USER_GRADE, USER_CLASS, SCHOOL_DDDEP_NM, USER_DDDEP_NM } =
+    cookies
 
-  const {
-    SCHUL_NM = '',
-    USER_GRADE = '',
-    USER_CLASS = '',
-    SCHOOL_DDDEP_NM = [],
-    USER_DDDEP_NM = '',
-  } = cookies
-
-  const [keyword, setKeyword] = useState<string>(SCHUL_NM)
-  const [grade, setGrade] = useState<string>(USER_GRADE)
-  const [myClass, setMyClass] = useState<string>(USER_CLASS)
-  const [selectMajor, setSelectMajor] = useState<string>(USER_DDDEP_NM)
+  const [keyword, setKeyword] = useState<string>('')
+  const [grade, setGrade] = useState<string>('')
+  const [myClass, setMyClass] = useState<string>('')
+  const [selectMajor, setSelectMajor] = useState<string>('')
   const [searchSchools, setSearchSchools] = useState<School[]>([])
   const [isOpen, setIsOpen] = useState(false)
 
@@ -42,6 +28,13 @@ const Profile: React.FC = () => {
 
   useFetchSchools(keyword, SCHUL_NM, setSearchSchools)
   const fetchDepartments = useFetchDepartments()
+
+  useEffect(() => {
+    setKeyword(SCHUL_NM || '')
+    setGrade(USER_GRADE || '')
+    setMyClass(USER_CLASS || '')
+    setSelectMajor(USER_DDDEP_NM || '')
+  }, [SCHUL_NM, USER_GRADE, USER_CLASS, USER_DDDEP_NM])
 
   const handleChange =
     (
@@ -56,7 +49,7 @@ const Profile: React.FC = () => {
       }
     }
 
-  const handleSelectSchool = async (school: School) => {
+  const handleSelectSchool = (school: School) => {
     setUserSchoolData(
       school.SCHUL_NM,
       school.ATPT_OFCDC_SC_CODE,
