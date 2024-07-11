@@ -1,9 +1,9 @@
 import DateButton from '@components/DateButton'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useCookies } from 'react-cookie'
 import { ScheduleData } from 'types/schedule'
 import getSchedule from '@apis/Schedule/getSchedule'
+import useScheduleCookie from '../../hook/cookie/useScheduleCookie'
 import Logo from '../../stories/atoms/Logo'
 import Return from '../../stories/atoms/Return'
 import ScheduleList from '../../stories/atoms/ScheduleList'
@@ -12,22 +12,14 @@ import * as S from './style'
 
 const Schedule = () => {
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [cookies] = useCookies([
-    'SCHUL_NM',
-    'ATPT_OFCDC_SC_CODE',
-    'SD_SCHUL_CODE',
-    'USER_DDDEP_NM',
-    'USER_GRADE',
-    'USER_CLASS',
-    'SCHUL_KND_SC_NM',
-  ])
+  const cookies = useScheduleCookie()
   const {
-    ATPT_OFCDC_SC_CODE = '',
-    SD_SCHUL_CODE = '',
-    USER_DDDEP_NM = ' ',
-    USER_GRADE = '',
-    USER_CLASS = '',
-    SCHUL_KND_SC_NM = '',
+    ATPT_OFCDC_SC_CODE,
+    SD_SCHUL_CODE,
+    USER_DDDEP_NM,
+    USER_GRADE,
+    USER_CLASS,
+    SCHUL_KND_SC_NM,
   } = cookies
 
   const scheduleURL = getScheduleURL(SCHUL_KND_SC_NM)

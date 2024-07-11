@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie'
 import { Link } from 'react-router-dom'
 import getMeal from '@apis/Meal/getMeal'
 import { getDate } from '@util/lib/getDate'
-import { useGetAllergy } from '../../hook/useGetAllergy'
+import { useGetAllergy } from '../../hook/profile/useGetAllergy'
 
 const Meal = () => {
   const [cookies] = useCookies(['ATPT_OFCDC_SC_CODE', 'SD_SCHUL_CODE'])
