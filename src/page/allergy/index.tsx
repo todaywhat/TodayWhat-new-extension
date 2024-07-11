@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { AllergyType } from 'types/allergy'
 import { useGetAllergy } from '../../hook/profile/useGetAllergy'
 import { allergyMock } from '../../mocks/allergyMock'
+import CheckButton from '../../stories/atoms/CheckButton'
+import Logo from '../../stories/atoms/Logo'
+import * as S from './style'
 
 const Allergy = () => {
   const [selectedAllergies, setSelectedAllergies] = useState<number[]>([])
@@ -27,23 +30,27 @@ const Allergy = () => {
   }
 
   return (
-    <div>
-      {allergyMock.map((allergy: AllergyType) => (
-        <div
-          style={{
-            border: selectedAllergies.includes(allergy.id)
-              ? '2px solid black'
-              : 'none',
-            marginBottom: '10px',
-            cursor: 'pointer',
-          }}
-          key={allergy.id}
-          onClick={() => handleClick(allergy.id)}
-        >
-          {allergy.allergy}
-        </div>
-      ))}
-    </div>
+    <S.Wrapper>
+      <S.Header>
+        <Logo />
+      </S.Header>
+      <S.ContentContainer>
+        <S.Title>알레르기</S.Title>
+        <S.AllergyContainer>
+          {allergyMock.map((allergy: AllergyType) => (
+            <S.Allergy
+              key={allergy.id}
+              isSelected={selectedAllergies.includes(allergy.id)}
+              onClick={() => handleClick(allergy.id)}
+            >
+              {allergy.icon}
+              {allergy.allergy}
+            </S.Allergy>
+          ))}
+        </S.AllergyContainer>
+        <CheckButton text='저장하기' />
+      </S.ContentContainer>
+    </S.Wrapper>
   )
 }
 

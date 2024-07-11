@@ -16,9 +16,6 @@ const InputStory: React.FC<InputStoryProps> = ({ category, placeholder }) => {
       placeholder={placeholder}
       value={value}
       setValue={setValue}
-      inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        setValue(e.target.value)
-      }
     />
   )
 }

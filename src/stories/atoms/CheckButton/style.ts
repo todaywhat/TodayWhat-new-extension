@@ -6,7 +6,8 @@ interface ButtonProps {
 
 export const Wrapper = styled.button<ButtonProps>`
   display: flex;
-  width: 21.4375rem;
+  /* width: 21.4375rem; */
+  width: 100%;
   height: 3.25rem;
   padding: 1rem 0px;
   justify-content: center;
