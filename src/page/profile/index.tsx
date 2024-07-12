@@ -1,9 +1,10 @@
-import React, { useState, ChangeEvent, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { School } from 'types/school'
 import useUserData from '@util/lib/userData'
 import useProfileCookie from '../../hook/cookie/useProfileCookie'
 import useFetchDepartments from '../../hook/profile/useFetchDepartments'
 import useFetchSchools from '../../hook/profile/useFetchSchools'
+import CheckButton from '../../stories/atoms/CheckButton'
 import Input from '../../stories/atoms/Input'
 import Logo from '../../stories/atoms/Logo'
 import Return from '../../stories/atoms/Return'
@@ -36,19 +37,6 @@ const Profile: React.FC = () => {
     setSelectMajor(USER_DDDEP_NM || '')
   }, [SCHUL_NM, USER_GRADE, USER_CLASS, USER_DDDEP_NM])
 
-  const handleChange =
-    (
-      setter: React.Dispatch<React.SetStateAction<string>>,
-      userDataSetter?: (value: string) => void,
-    ) =>
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value
-      setter(value)
-      if (userDataSetter) {
-        userDataSetter(value)
-      }
-    }
-
   const handleSelectSchool = (school: School) => {
     setUserSchoolData(
       school.SCHUL_NM,
@@ -79,7 +67,6 @@ const Profile: React.FC = () => {
             setValue={setKeyword}
             category='학교이름'
             value={keyword}
-            inputChange={handleChange(setKeyword)}
             placeholder='학교이름을 입력해주세요.'
           />
           {searchSchools.length > 0 &&
@@ -108,21 +95,22 @@ const Profile: React.FC = () => {
             {!isOpen && (
               <>
                 <Input
+                  cookie={setUserGrade}
                   setValue={setGrade}
                   value={grade}
                   category='학년'
-                  inputChange={handleChange(setGrade, setUserGrade)}
                   placeholder='학년을 입력하세요'
                 />
                 <Input
+                  cookie={setUserClass}
                   setValue={setMyClass}
                   value={myClass}
                   category='반'
-                  inputChange={handleChange(setMyClass, setUserClass)}
                   placeholder='반을 입력해주세요.'
                 />
               </>
             )}
+            <CheckButton text='확인!' />
           </>
         )}
       </S.InputContainer>

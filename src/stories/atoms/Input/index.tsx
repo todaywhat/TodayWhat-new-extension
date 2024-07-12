@@ -1,4 +1,9 @@
-import React, { DetailedHTMLProps, InputHTMLAttributes, useState } from 'react'
+import React, {
+  ChangeEvent,
+  DetailedHTMLProps,
+  InputHTMLAttributes,
+  useState,
+} from 'react'
 import { XmarkCircle } from '../../icons/index'
 import * as S from './style'
 
@@ -9,15 +14,15 @@ interface Props
   > {
   category: string
   value: string
+  cookie?: (value: string) => void
   setValue: React.Dispatch<React.SetStateAction<string>>
-  inputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Input: React.FC<Props> = ({
-  value = '',
+  value,
   setValue,
   category,
-  inputChange,
+  cookie,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -25,6 +30,19 @@ const Input: React.FC<Props> = ({
   const resetHandler = () => {
     setValue('')
   }
+
+  const handleChange =
+    (
+      setter: React.Dispatch<React.SetStateAction<string>>,
+      userDataSetter?: (value: string) => void,
+    ) =>
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value
+      setter(value)
+      if (userDataSetter) {
+        userDataSetter(value)
+      }
+    }
 
   return (
     <S.Wrapper>
@@ -34,7 +52,7 @@ const Input: React.FC<Props> = ({
           {...props}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          onChange={inputChange}
+          onChange={handleChange(setValue, cookie)}
           value={value}
         />
         <S.Icon>
