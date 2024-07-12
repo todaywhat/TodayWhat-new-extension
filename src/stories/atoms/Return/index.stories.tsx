@@ -11,7 +11,7 @@ const MemoryRouterDecorator: Decorator = (Story) => (
 const config: Meta<typeof Return> = {
   title: 'Return',
   component: Return,
-  decorators: [MemoryRouterDecorator], // Add the decorator here
+  decorators: [MemoryRouterDecorator],
   args: {},
 }
 
