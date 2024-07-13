@@ -7,25 +7,25 @@ interface DateProps {
 }
 
 const DateButton: React.FC<DateProps> = ({ setCurrentDate }) => {
-  const [selectedButton, setSelectedButton] = useState('오늘')
+  const [selectedButton, setSelectedButton] = useState(0)
 
-  const handleDateButtonClick = (days: number, buttonText: string) => {
-    if (selectedButton === buttonText) {
+  const handleDateButtonClick = (days: number) => {
+    if (selectedButton === days) {
       return
     }
 
     const today = new Date()
     today.setDate(today.getDate() + days)
     setCurrentDate(today)
-    setSelectedButton(buttonText)
+    setSelectedButton(days)
   }
 
   const renderTimeButton = (text: string, days: number) => {
     return (
       <TimeButton
         text={text}
-        onClick={() => handleDateButtonClick(days, text)}
-        selected={selectedButton === text}
+        onClick={() => handleDateButtonClick(days)}
+        selected={selectedButton === days}
       />
     )
   }

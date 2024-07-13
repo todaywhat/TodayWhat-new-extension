@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import * as S from './style'
 
 interface Props {
-  text?: string
+  text: string
   icons?: ReactNode
 }
 

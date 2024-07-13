@@ -1,56 +1,80 @@
 import DateButton from '@components/DateButton'
+import FilterMealList from '@components/FilterMealList'
 import MealButton from '@components/MealButton'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
-import { Link } from 'react-router-dom'
+import { MealResponse, ProcessedMealData } from 'types/meal'
 import getMeal from '@apis/Meal/getMeal'
-import { getDate } from '@util/lib/getDate'
 import { useGetAllergy } from '../../hook/profile/useGetAllergy'
+import { Rice } from '../../stories/assets/svg'
+import Logo from '../../stories/atoms/Logo'
+import Return from '../../stories/atoms/Return'
+import * as S from './style'
 
 const Meal = () => {
   const [cookies] = useCookies(['ATPT_OFCDC_SC_CODE', 'SD_SCHUL_CODE'])
-  const [currentDate, setCurrentDate] = useState(new Date())
-  const [mealNumber, setMealNumber] = useState<number>(0)
+  const [currentDate, setCurrentDate] = useState<Date>(new Date())
+  const [mealNumber, setMealNumber] = useState<number>(1)
   const [selectedAllergies, setSelectedAllergies] = useState<number[]>([])
 
   useGetAllergy(setSelectedAllergies)
 
-  const { data } = useQuery({
+  const { data } = useQuery<MealResponse>({
     queryKey: ['mealData', currentDate],
     queryFn: () => getMeal(cookies, currentDate),
     staleTime: 5 * 60 * 1000,
   })
 
-  const mealData: string[] | 'loading...' = useMemo(() => {
-    if (data) {
-      return (
-        data[mealNumber]?.DDISH_NM.replace(
-          /\([ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]*\)|[*<br/>a-z.() ]/g,
-          '`',
-        ).split('`') || ['급식이 없습니다.']
-      )
+  const mealData: ProcessedMealData = useMemo(() => {
+    if (data && data[mealNumber]) {
+      const meals = data[mealNumber]?.DDISH_NM.split('<br/>')
+        .map((meal) => meal.trim())
+        .filter((meal) => meal !== '')
+      const calories = data[mealNumber]?.CAL_INFO
+      return { mealData: meals, calInfo: calories }
     }
-    return 'loading...'
+
+    return {
+      mealData: ['급식이 없습니다.'],
+      calInfo: '칼로리 정보가 없습니다.',
+    }
   }, [mealNumber, data])
 
+  const renderTimeButton = () => {
+    return (
+      <>
+        {mealNumber === 0 && <p>아침</p>}
+        {mealNumber === 1 && <p>점심</p>}
+        {mealNumber === 2 && <p>저녁</p>}
+      </>
+    )
+  }
+
   return (
-    <>
-      <h1>{getDate(currentDate)}</h1>
-      <h2>{selectedAllergies}</h2>
-      <DateButton setCurrentDate={setCurrentDate} />
-      <MealButton setMealNumber={setMealNumber} />
-      <div>
-        {mealData === 'loading...' ? (
-          <div>{mealData}</div>
-        ) : (
-          mealData.map((meal: string, index: number) => (
-            <div key={index}>{meal}</div>
-          ))
-        )}
-      </div>
-      <Link to='/'>돌아가기</Link>
-    </>
+    <S.Wrapper>
+      <S.Header>
+        <Logo />
+        <Return />
+      </S.Header>
+      <S.NavContainer>
+        <S.ButtonContainer>
+          <DateButton setCurrentDate={setCurrentDate} />
+          <MealButton setMealNumber={setMealNumber} />
+        </S.ButtonContainer>
+        <Rice />
+      </S.NavContainer>
+      <S.MealCalorieInfoCotainer>
+        {renderTimeButton()}
+        {mealData.calInfo}
+      </S.MealCalorieInfoCotainer>
+      <S.MealListContainer>
+        <FilterMealList
+          mealData={mealData.mealData}
+          selectedAllergies={selectedAllergies}
+        />
+      </S.MealListContainer>
+    </S.Wrapper>
   )
 }
 
