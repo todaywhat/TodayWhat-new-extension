@@ -1,16 +1,14 @@
-// Meal.tsx
-
 import DateButton from '@components/DateButton'
+import FilterMealList from '@components/FilterMealList'
 import MealButton from '@components/MealButton'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { MealResponse, ProcessedMealData } from 'types/meal'
 import getMeal from '@apis/Meal/getMeal'
-
+import { useGetAllergy } from '../../hook/profile/useGetAllergy'
 import { Rice } from '../../stories/assets/svg'
 import Logo from '../../stories/atoms/Logo'
-import MealList from '../../stories/atoms/MealList'
 import Return from '../../stories/atoms/Return'
 import * as S from './style'
 
@@ -18,6 +16,9 @@ const Meal = () => {
   const [cookies] = useCookies(['ATPT_OFCDC_SC_CODE', 'SD_SCHUL_CODE'])
   const [currentDate, setCurrentDate] = useState<Date>(new Date())
   const [mealNumber, setMealNumber] = useState<number>(1)
+  const [selectedAllergies, setSelectedAllergies] = useState<number[]>([])
+
+  useGetAllergy(setSelectedAllergies)
 
   const { data } = useQuery<MealResponse>({
     queryKey: ['mealData', currentDate],
@@ -27,12 +28,9 @@ const Meal = () => {
 
   const mealData: ProcessedMealData = useMemo(() => {
     if (data && data[mealNumber]) {
-      const meals = data[mealNumber]?.DDISH_NM.replace(
-        /\([ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.]*\)|[*<br/>a-z.() ]/g,
-        '`',
-      )
-        .split('`')
-        .filter((meal) => meal.trim() !== '')
+      const meals = data[mealNumber]?.DDISH_NM.split('<br/>')
+        .map((meal) => meal.trim())
+        .filter((meal) => meal !== '')
       const calories = data[mealNumber]?.CAL_INFO
       return { mealData: meals, calInfo: calories }
     }
@@ -71,9 +69,10 @@ const Meal = () => {
         {mealData.calInfo}
       </S.MealCalorieInfoCotainer>
       <S.MealListContainer>
-        {mealData.mealData.map((meal: string, index: number) => (
-          <MealList key={index} text={meal} />
-        ))}
+        <FilterMealList
+          mealData={mealData.mealData}
+          selectedAllergies={selectedAllergies}
+        />
       </S.MealListContainer>
     </S.Wrapper>
   )
