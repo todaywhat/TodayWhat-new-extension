@@ -13,4 +13,6 @@ export default config
 
 type Story = StoryObj<typeof MealList>
 
-export const Primary: Story = { args: { text: '쌀밥', icons: <Allergies /> } }
+export const Primary: Story = {
+  args: { icons: <Allergies />, text: '저녁 후 내일 급식 표시' },
+}
