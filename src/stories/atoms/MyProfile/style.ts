@@ -6,7 +6,8 @@ export const Wrapper = styled.div`
   border-radius: 16px;
   background: #f8f8f8;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  padding: 0 0.5rem;
 `
 
 export const ProfileContainer = styled.div`
