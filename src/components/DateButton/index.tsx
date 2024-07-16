@@ -10,8 +10,26 @@ interface DateProps {
 const DateButton: React.FC<DateProps> = ({ setCurrentDate }) => {
   const [selectedButton, setSelectedButton] = useState(0)
   const [weekendSkip, setWeekendSkip] = useState(false)
+  const [mealToggle, setMealToggle] = useState(false)
 
-  useGetAllSetting(undefined, setWeekendSkip)
+  useGetAllSetting(setMealToggle, setWeekendSkip)
+
+  useEffect(() => {
+    const currentDate = new Date()
+    const currentHour = currentDate.getHours()
+
+    if (mealToggle) {
+      if (currentHour >= 19 && currentHour < 24) {
+        setSelectedButton(1)
+        const tomorrow = new Date()
+        tomorrow.setDate(currentDate.getDate() + 1)
+        setCurrentDate(tomorrow)
+      } else {
+        setSelectedButton(0)
+        setCurrentDate(currentDate)
+      }
+    }
+  }, [mealToggle, setCurrentDate])
 
   useEffect(() => {
     let today = new Date()
