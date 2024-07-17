@@ -6,7 +6,6 @@ import NoticeDetailContent from '../../stories/atoms/NoticeDetailContent'
 import Return from '../../stories/atoms/Return'
 import * as S from './style'
 
-// Define interface for notice item
 interface Notice {
   id: number
   title: string

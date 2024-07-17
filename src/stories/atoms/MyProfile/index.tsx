@@ -3,17 +3,24 @@ import * as S from './style'
 
 interface Props {
   school: string
-  Grade: string
-  Myclass: string
+  Grade?: string
+  Myclass?: string
 }
 
-const MyProfile: React.FC<Props> = ({ school, Grade, Myclass, ...props }) => {
+const MyProfile: React.FC<Props> = ({
+  school,
+  Grade = '',
+  Myclass = '',
+  ...props
+}) => {
   return (
     <S.Wrapper {...props}>
       <S.ProfileContainer>
         <S.SchoolText>{school}</S.SchoolText>
         <S.ClassText>
-          {Grade}학년{Myclass}반
+          {Grade && Myclass
+            ? `${Grade}학년${Myclass}반`
+            : '프로필을 설정해주세요'}
         </S.ClassText>
       </S.ProfileContainer>
       <S.RiceIcon>

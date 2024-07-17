@@ -24,7 +24,7 @@ const Schedule = () => {
 
   const scheduleURL = getScheduleURL(SCHUL_KND_SC_NM)
 
-  const { data } = useQuery<ScheduleData[]>({
+  const { data, isLoading } = useQuery<ScheduleData[]>({
     queryKey: ['scheduleData', currentDate],
     queryFn: () =>
       getSchedule(
@@ -49,13 +49,19 @@ const Schedule = () => {
         <DateButton setCurrentDate={setCurrentDate} />
       </S.NavContainer>
       <S.ScheduleContiner>
-        {data?.map((schedule: ScheduleData, index: number) => (
-          <ScheduleList
-            key={index}
-            time={`${index + 1}교시`}
-            subject={schedule?.ITRT_CNTNT}
-          />
-        ))}
+        {isLoading ? (
+          <p>로딩중...</p>
+        ) : data && data.length > 0 ? (
+          data.map((schedule: ScheduleData, index: number) => (
+            <ScheduleList
+              key={index}
+              time={`${index + 1}교시`}
+              subject={schedule?.ITRT_CNTNT}
+            />
+          ))
+        ) : (
+          <ScheduleList subject='시간표가 없습니다.' />
+        )}
       </S.ScheduleContiner>
     </S.Wrapper>
   )
