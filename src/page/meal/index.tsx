@@ -20,7 +20,7 @@ const Meal = () => {
 
   useGetAllergy(setSelectedAllergies)
 
-  const { data } = useQuery<MealResponse>({
+  const { data, isLoading } = useQuery<MealResponse>({
     queryKey: ['mealData', currentDate],
     queryFn: () => getMeal(cookies, currentDate),
     staleTime: 5 * 60 * 1000,
@@ -66,13 +66,18 @@ const Meal = () => {
       </S.NavContainer>
       <S.MealCalorieInfoCotainer>
         {renderTimeButton()}
-        {mealData.calInfo}
+        {isLoading ? '로딩 중...' : mealData.calInfo}
       </S.MealCalorieInfoCotainer>
       <S.MealListContainer>
-        <FilterMealList
-          mealData={mealData.mealData}
-          selectedAllergies={selectedAllergies}
-        />
+        {isLoading ? (
+          // <FilterMealList mealData='로딩중...' />
+          <p>로딩중...</p>
+        ) : (
+          <FilterMealList
+            mealData={mealData.mealData}
+            selectedAllergies={selectedAllergies}
+          />
+        )}
       </S.MealListContainer>
     </S.Wrapper>
   )
