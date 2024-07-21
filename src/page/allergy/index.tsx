@@ -1,9 +1,9 @@
+import { useGetAllergy } from '@hook/profile/useGetAllergy'
+import { allergyMock } from '@mocks/allergyMock'
+import CheckButton from '@stories/atoms/CheckButton'
+import Logo from '@stories/atoms/Logo'
 import { useState } from 'react'
 import { AllergyType } from 'types/allergy'
-import { useGetAllergy } from '../../hook/profile/useGetAllergy'
-import { allergyMock } from '../../mocks/allergyMock'
-import CheckButton from '../../stories/atoms/CheckButton'
-import Logo from '../../stories/atoms/Logo'
 import * as S from './style'
 
 const Allergy = () => {

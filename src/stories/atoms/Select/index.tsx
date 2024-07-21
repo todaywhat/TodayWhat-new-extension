@@ -1,7 +1,5 @@
-import DRadio from '../../assets/svg/DRadio'
-import Radio from '../../assets/svg/Radio'
-import Down from '../../icons/Down'
-import Up from '../../icons/UP'
+import { DRadio, Radio } from '../../assets/svg/index'
+import { Down, Up } from '../../icons/index'
 import * as S from './style'
 
 interface Props {

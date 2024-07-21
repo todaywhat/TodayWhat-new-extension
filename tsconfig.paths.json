@@ -3,9 +3,14 @@
     "baseUrl": "./src",
     "paths": {
       "@apis/*": ["./apis/*"],
+      "@components/*": ["./components/*"],
+      "@hook/*": ["./hook/*"],
+      "@mocks/*": ["./mocks/*"],
       "@page/*": ["./page/*"],
-      "@util/*": ["./util/*"],
-      "@components/*": ["./components/*"]
+      "@stories/*": ["./stories/*"],
+      "@styles/*": ["./styles/*"],
+      "@types/*": ["./types/*"],
+      "@util/*": ["./util/*"]
     }
   }
 }

@@ -3,12 +3,12 @@ import Allergy from '@page/allergy'
 import Home from '@page/home'
 import Meal from '@page/meal'
 import Notice from '@page/notice'
-import NoticeDetail from '@page/NoticeDetail'
+import NoticeDetail from '@page/noticeDetail'
 import Profile from '@page/profile'
 import Schedule from '@page/schedule'
 import Setting from '@page/setting'
-import './styles/global.css'
-import './styles/fonts.css'
+import '@styles/global.css'
+import '@styles/fonts.css'
 
 const AppRoutes = () => {
   return (

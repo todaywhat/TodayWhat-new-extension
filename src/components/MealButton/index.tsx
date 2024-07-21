@@ -1,5 +1,5 @@
+import TimeButton from '@stories/atoms/TimeButton'
 import React, { useState } from 'react'
-import TimeButton from '../../stories/atoms/TimeButton'
 import * as S from './style'
 
 interface MealProps {

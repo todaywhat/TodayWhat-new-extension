@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom'
-import Logo from '../../stories/atoms/Logo'
-import NavigateButton from '../../stories/atoms/NavigateButton'
+import Logo from '@stories/atoms/Logo'
+import NavigateButton from '@stories/atoms/NavigateButton'
 import {
   User,
   Calendar,
@@ -8,7 +7,8 @@ import {
   Allergies,
   Setting,
   Notice,
-} from '../../stories/icons'
+} from '@stories/icons/index'
+import { useNavigate } from 'react-router-dom'
 import * as S from './style'
 
 const mainNav = [
