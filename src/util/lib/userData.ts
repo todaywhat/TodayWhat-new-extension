@@ -1,5 +1,5 @@
 import { useCookies } from 'react-cookie'
-import { expirationCooie } from './expirationCooie'
+import { expirationCookie } from './expirationCookie'
 
 const useUserData = () => {
   const [cookies, setCookie] = useCookies([
@@ -19,18 +19,18 @@ const useUserData = () => {
     SD_SCHUL_CODE: string,
     SCHUL_KND_SC_NM: string,
   ) => {
-    setCookie('SCHUL_NM', SCHUL_NM, { path: '/', expires: expirationCooie() })
+    setCookie('SCHUL_NM', SCHUL_NM, { path: '/', expires: expirationCookie() })
     setCookie('ATPT_OFCDC_SC_CODE', ATPT_OFCDC_SC_CODE, {
       path: '/',
-      expires: expirationCooie(),
+      expires: expirationCookie(),
     })
     setCookie('SD_SCHUL_CODE', SD_SCHUL_CODE, {
       path: '/',
-      expires: expirationCooie(),
+      expires: expirationCookie(),
     })
     setCookie('SCHUL_KND_SC_NM', SCHUL_KND_SC_NM, {
       path: '/',
-      expires: expirationCooie(),
+      expires: expirationCookie(),
     })
   }
 
@@ -38,28 +38,28 @@ const useUserData = () => {
     const updatedDepartmentObject = ['선택안함', ...departmentObject]
     setCookie('SCHOOL_DDDEP_NM', JSON.stringify(updatedDepartmentObject), {
       path: '/',
-      expires: expirationCooie(),
+      expires: expirationCookie(),
     })
   }
 
   const setUserMajorData = (DDDEP_NM: string) => {
     setCookie('USER_DDDEP_NM', DDDEP_NM, {
       path: '/',
-      expires: expirationCooie(),
+      expires: expirationCookie(),
     })
   }
 
   const setUserGrade = (userGrade: string) => {
     setCookie('USER_GRADE', userGrade, {
       path: '/',
-      expires: expirationCooie(),
+      expires: expirationCookie(),
     })
   }
 
   const setUserClass = (userClass: string) => {
     setCookie('USER_CLASS', userClass, {
       path: '/',
-      expires: expirationCooie(),
+      expires: expirationCookie(),
     })
   }
 
