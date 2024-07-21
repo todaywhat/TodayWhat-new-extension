@@ -1,8 +1,8 @@
+import { NoticeMock } from '@mocks/noticeMock'
+import Logo from '@stories/atoms/Logo'
+import Notification from '@stories/atoms/Notification'
+import Return from '@stories/atoms/Return'
 import { Link } from 'react-router-dom'
-import { NoticeMock } from '../../mocks/noticeMock'
-import Logo from '../../stories/atoms/Logo'
-import Notification from '../../stories/atoms/Notification'
-import Return from '../../stories/atoms/Return'
 import * as S from './style'
 
 interface NoticeType {

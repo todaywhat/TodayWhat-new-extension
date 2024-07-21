@@ -1,6 +1,6 @@
+import { useGetAllSetting } from '@hook/profile/useGetSetting'
+import TimeButton from '@stories/atoms/TimeButton'
 import React, { useEffect, useState } from 'react'
-import { useGetAllSetting } from '../../hook/profile/useGetSetting'
-import TimeButton from '../../stories/atoms/TimeButton'
 import * as S from './style'
 
 interface DateProps {

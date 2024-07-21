@@ -1,6 +1,6 @@
-import { Department } from 'types/department'
 import getDepartment from '@apis/Profile/getDepartment'
 import useUserData from '@util/lib/userData'
+import type { Department } from 'types/department'
 
 const useFetchDepartments = () => {
   const { setUserMajorData, getSchoolMajorData } = useUserData()

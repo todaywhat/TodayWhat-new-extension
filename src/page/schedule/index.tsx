@@ -1,13 +1,13 @@
 import DateButton from '@components/DateButton'
+import useScheduleCookie from '@hook/cookie/useScheduleCookie'
+import Logo from '@stories/atoms/Logo'
+import Return from '@stories/atoms/Return'
+import ScheduleList from '@stories/atoms/ScheduleList'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { ScheduleData } from 'types/schedule'
 import getSchedule from '@apis/Schedule/getSchedule'
-import useScheduleCookie from '../../hook/cookie/useScheduleCookie'
-import Logo from '../../stories/atoms/Logo'
-import Return from '../../stories/atoms/Return'
-import ScheduleList from '../../stories/atoms/ScheduleList'
-import getScheduleURL from '../../util/lib/getScheduleURL'
+import getScheduleURL from '@util/lib/getScheduleURL'
 import * as S from './style'
 
 const Schedule = () => {

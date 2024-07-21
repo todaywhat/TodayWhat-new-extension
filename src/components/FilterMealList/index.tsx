@@ -1,6 +1,6 @@
+import MealList from '@stories/atoms/MealList'
+import { Allergies } from '@stories/icons'
 import React from 'react'
-import MealList from '../../stories/atoms/MealList'
-import { Allergies } from '../../stories/icons'
 
 interface Props {
   mealData: string[]
