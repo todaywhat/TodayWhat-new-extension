@@ -21,4 +21,5 @@ export const Text = styled.p`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  white-space: nowrap;
 `
