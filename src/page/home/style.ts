@@ -1,16 +1,16 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  width: 348px;
-  height: 315px;
+  width: 21.75rem;
+  height: 19.6875rem;
   display: inline-flex;
-  padding: 32px 40px;
+  padding: 2rem 2.5rem;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 24px;
+  gap: 1.5rem;
 
-  border-radius: 20px;
+  border-radius: 1.25rem;
   background: #fff;
 `
 
