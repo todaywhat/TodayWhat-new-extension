@@ -70,7 +70,6 @@ const Meal = () => {
       </S.MealCalorieInfoCotainer>
       <S.MealListContainer>
         {isLoading ? (
-          // <FilterMealList mealData='로딩중...' />
           <p>로딩중...</p>
         ) : (
           <FilterMealList

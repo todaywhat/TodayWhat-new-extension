@@ -8,18 +8,18 @@ interface Props {
 }
 
 const FilterMealList: React.FC<Props> = ({ mealData, selectedAllergies }) => {
-  const allergensRegex = /\((.*?)\)/
+  const allergensRegex = /\((\d+(\.\d+)*)\)/g
 
   return (
     <>
       {mealData.map((meal, index) => {
-        const match = meal.match(allergensRegex)
+        const matches = meal.match(allergensRegex) || []
         let allergens: number[] = []
 
-        if (match) {
-          const allergenStr = match[1]
-          allergens = allergenStr.split('.').map(Number)
-        }
+        matches.forEach((match) => {
+          const allergenStr = match.slice(1, -1)
+          allergens = allergens.concat(allergenStr.split('.').map(Number))
+        })
 
         const hasAllergies = selectedAllergies.some((allergy) =>
           allergens.includes(allergy),
