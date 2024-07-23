@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "short_name": "React App",
   "name": "오늘 뭐임",
   "action": {
@@ -12,7 +12,7 @@
     "default_title": "오늘 뭐임",
     "default_popup": "index.html"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "activeTab"],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
