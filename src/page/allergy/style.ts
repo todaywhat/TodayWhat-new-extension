@@ -5,13 +5,13 @@ interface AllergyProps {
 }
 
 export const Wrapper = styled.div`
-  width: 39.75rem;
-  height: 36.3125rem;
+  width: 423px;
+  height: 600px;
   border-radius: 1.25rem;
-  background: #fff;
   padding: 2rem 2.5rem;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 `
 export const Header = styled.div`
   display: flex;
@@ -44,15 +44,16 @@ export const AllergyContainer = styled.div`
 
 export const Allergy = styled.div<AllergyProps>`
   display: flex;
-  width: 8.125rem;
-  height: 3.5rem;
+  flex-direction: column;
+  width: 70px;
+  height: 80px;
   padding: 1rem 1.25rem;
   align-items: center;
   gap: 0.625rem;
   background-color: transparent;
 
   border-radius: 0.75rem;
-  border: 1px solid ${({ isSelected }) => (isSelected ? ' black' : '#ddd')};
+  border: 2px solid ${({ isSelected }) => (isSelected ? ' black' : '#ddd')};
   cursor: pointer;
 
   color: #8e8e8e;
@@ -62,4 +63,5 @@ export const Allergy = styled.div<AllergyProps>`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  white-space: nowrap;
 `
