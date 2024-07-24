@@ -6,6 +6,7 @@ const useFetchSchools = (
   keyword: string,
   SCHUL_NM: string,
   setSearchSchools: React.Dispatch<React.SetStateAction<School[]>>,
+  setLoading: (loading: boolean) => void,
 ) => {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -20,11 +21,14 @@ const useFetchSchools = (
   }, [keyword, SCHUL_NM])
 
   const fetchSchools = async (searchKeyword: string) => {
+    setLoading(true)
     try {
       const data = await getSchool(searchKeyword)
       setSearchSchools(data && data.length > 0 ? data : [])
     } catch (error) {
       setSearchSchools([])
+    } finally {
+      setLoading(false)
     }
   }
 }

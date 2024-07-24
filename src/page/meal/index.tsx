@@ -4,6 +4,7 @@ import MealButton from '@components/MealButton'
 import { useGetAllergy } from '@hook/profile/useGetAllergy'
 import { Rice } from '@stories/assets/svg'
 import Logo from '@stories/atoms/Logo'
+import MealListSkeleton from '@stories/atoms/MealList/MealListSkeleton'
 import Return from '@stories/atoms/Return'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
@@ -70,7 +71,9 @@ const Meal = () => {
       </S.MealCalorieInfoCotainer>
       <S.MealListContainer>
         {isLoading ? (
-          <p>로딩중...</p>
+          Array.from({ length: 7 }).map((_, index) => (
+            <MealListSkeleton key={index} />
+          ))
         ) : (
           <FilterMealList
             mealData={mealData.mealData}
