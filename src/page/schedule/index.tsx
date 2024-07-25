@@ -3,6 +3,7 @@ import useScheduleCookie from '@hook/cookie/useScheduleCookie'
 import Logo from '@stories/atoms/Logo'
 import Return from '@stories/atoms/Return'
 import ScheduleList from '@stories/atoms/ScheduleList'
+import ScheduleListSkeleton from '@stories/atoms/ScheduleList/ScheduleListSkeleton'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { ScheduleData } from 'types/schedule'
@@ -50,7 +51,9 @@ const Schedule = () => {
       </S.NavContainer>
       <S.ScheduleContiner>
         {isLoading ? (
-          <p>로딩중...</p>
+          Array.from({ length: 6 }).map((_, index) => (
+            <ScheduleListSkeleton key={index} />
+          ))
         ) : data && data.length > 0 ? (
           data.map((schedule: ScheduleData, index: number) => (
             <ScheduleList

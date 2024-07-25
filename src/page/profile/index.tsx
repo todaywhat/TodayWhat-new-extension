@@ -6,6 +6,7 @@ import Input from '@stories/atoms/Input'
 import Logo from '@stories/atoms/Logo'
 import Return from '@stories/atoms/Return'
 import SearchList from '@stories/atoms/SearchList'
+import SearchListSkeleton from '@stories/atoms/SearchList/SearchListSkeleton'
 import Select from '@stories/atoms/Select'
 import React, { useState, useEffect } from 'react'
 import { School } from 'types/school'
@@ -23,12 +24,11 @@ const Profile: React.FC = () => {
   const [selectMajor, setSelectMajor] = useState<string>('')
   const [searchSchools, setSearchSchools] = useState<School[]>([])
   const [isOpen, setIsOpen] = useState(false)
-
+  const [loading, setLoading] = useState<boolean>(false)
   const { setUserSchoolData, setUserGrade, setUserClass, setUserMajorData } =
     useUserData()
 
-  useFetchSchools(keyword, SCHUL_NM, setSearchSchools)
-  const fetchDepartments = useFetchDepartments()
+  useFetchSchools(keyword, SCHUL_NM, setSearchSchools, setLoading)
 
   useEffect(() => {
     setKeyword(SCHUL_NM || '')
@@ -36,6 +36,8 @@ const Profile: React.FC = () => {
     setMyClass(USER_CLASS || '')
     setSelectMajor(USER_DDDEP_NM || '')
   }, [SCHUL_NM, USER_GRADE, USER_CLASS, USER_DDDEP_NM])
+
+  const fetchDepartments = useFetchDepartments()
 
   const handleSelectSchool = (school: School) => {
     setUserSchoolData(
@@ -69,15 +71,19 @@ const Profile: React.FC = () => {
             value={keyword}
             placeholder='학교이름을 입력해주세요.'
           />
-          {searchSchools.length > 0 &&
-            searchSchools.map((school) => (
-              <SearchList
-                onclick={() => handleSelectSchool(school)}
-                key={school.SCHUL_NM}
-                school={school.SCHUL_NM}
-                location={school.ORG_RDNMA}
-              />
-            ))}
+          {loading
+            ? Array.from({ length: 7 }).map((_, index) => (
+                <SearchListSkeleton key={index} />
+              ))
+            : searchSchools.length > 0 &&
+              searchSchools.map((school) => (
+                <SearchList
+                  onclick={() => handleSelectSchool(school)}
+                  key={school.SCHUL_NM}
+                  school={school.SCHUL_NM}
+                  location={school.ORG_RDNMA}
+                />
+              ))}
         </S.SearchContiner>
         {searchSchools.length === 0 && (
           <>
