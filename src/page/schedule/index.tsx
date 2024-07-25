@@ -1,5 +1,6 @@
 import DateButton from '@components/DateButton'
 import useScheduleCookie from '@hook/cookie/useScheduleCookie'
+import { Stroke } from '@stories/assets/svg'
 import Logo from '@stories/atoms/Logo'
 import Return from '@stories/atoms/Return'
 import ScheduleList from '@stories/atoms/ScheduleList'
@@ -60,6 +61,7 @@ const Schedule = () => {
               key={index}
               time={`${index + 1}교시`}
               subject={schedule?.ITRT_CNTNT}
+              icons={<Stroke />}
             />
           ))
         ) : (

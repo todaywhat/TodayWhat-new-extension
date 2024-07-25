@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
@@ -16,11 +15,14 @@ export const Discord = styled.p`
   line-height: 1.3125rem;
 `
 
-export const Github = styled(Link)`
+export const Github = styled.a`
   display: flex;
   width: 1.5rem;
   height: 1.5rem;
   justify-content: center;
   align-items: center;
   color: #8e8e8e;
+  &:hover {
+    cursor: pointer;
+  }
 `
