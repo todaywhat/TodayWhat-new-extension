@@ -16,10 +16,9 @@ const FilterMealList: React.FC<Props> = ({ mealData, selectedAllergies }) => {
         const matches = meal.match(allergensRegex) || []
         let allergens: number[] = []
 
-        matches.forEach((match) => {
-          const allergenStr = match.slice(1, -1)
-          allergens = allergens.concat(allergenStr.split('.').map(Number))
-        })
+        allergens = matches.flatMap((match) =>
+          match.slice(1, -1).split('.').map(Number),
+        )
 
         const hasAllergies = selectedAllergies.some((allergy) =>
           allergens.includes(allergy),
