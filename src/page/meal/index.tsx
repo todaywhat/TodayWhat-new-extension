@@ -25,6 +25,7 @@ const Meal = () => {
     queryKey: ['mealData', currentDate],
     queryFn: () => getMeal(cookies, currentDate),
     staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   })
 
   const mealData: ProcessedMealData = useMemo(() => {
