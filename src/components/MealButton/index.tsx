@@ -1,24 +1,36 @@
 import TimeButton from '@stories/atoms/TimeButton'
-import React, { useState } from 'react'
+import { useEffect } from 'react'
 import * as S from './style'
 
 interface MealProps {
+  mealNumber: number
   setMealNumber: (num: number) => void
 }
 
-const MealButton: React.FC<MealProps> = ({ setMealNumber }) => {
-  const [selectedButton, setSelectedButton] = useState(1)
+const MealButton: React.FC<MealProps> = ({ mealNumber, setMealNumber }) => {
   const handleDate = (time: number) => {
     setMealNumber(time)
-    setSelectedButton(time)
   }
+
+  useEffect(() => {
+    const currentDate = new Date()
+    const currentHour = currentDate.getHours()
+
+    if (currentHour >= 0 && currentHour < 8) {
+      setMealNumber(0)
+    } else if (currentHour >= 8 && currentHour < 13) {
+      setMealNumber(1)
+    } else if (currentHour >= 13 && currentHour < 20) {
+      setMealNumber(2)
+    }
+  }, [setMealNumber])
 
   const renderTimeButton = (text: string, time: number) => {
     return (
       <TimeButton
         text={text}
         onClick={() => handleDate(time)}
-        selected={selectedButton === time}
+        selected={mealNumber === time}
       />
     )
   }
