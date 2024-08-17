@@ -16,7 +16,7 @@ import * as S from './style'
 const Meal = () => {
   const [cookies] = useCookies(['ATPT_OFCDC_SC_CODE', 'SD_SCHUL_CODE'])
   const [currentDate, setCurrentDate] = useState<Date>(new Date())
-  const [mealNumber, setMealNumber] = useState<number>(1)
+  const [mealNumber, setMealNumber] = useState<number>(0)
   const [selectedAllergies, setSelectedAllergies] = useState<number[]>([])
 
   useGetAllergy(setSelectedAllergies)
@@ -62,7 +62,7 @@ const Meal = () => {
       <S.NavContainer>
         <S.ButtonContainer>
           <DateButton setCurrentDate={setCurrentDate} />
-          <MealButton setMealNumber={setMealNumber} />
+          <MealButton mealNumber={mealNumber} setMealNumber={setMealNumber} />
         </S.ButtonContainer>
         <Rice />
       </S.NavContainer>
