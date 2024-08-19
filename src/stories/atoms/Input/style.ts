@@ -19,7 +19,6 @@ export const Category = styled.p`
 
 export const InputWrapper = styled.label<InputWrapperProps>`
   display: flex;
-  width: 21.4375rem;
   height: 3.25rem;
   padding: 0px 1rem;
   align-items: center;

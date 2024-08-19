@@ -36,17 +36,15 @@ export const Title = styled.p`
 
 export const AllergyContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(10, 1fr);
   grid-column-gap: 0.75rem;
   grid-row-gap: 1rem;
 `
 
 export const Allergy = styled.div<AllergyProps>`
   display: flex;
-  flex-direction: column;
-  width: 70px;
-  height: 80px;
+  width: 10.3125rem;
   padding: 1rem 1.25rem;
   align-items: center;
   gap: 0.625rem;
@@ -64,4 +62,14 @@ export const Allergy = styled.div<AllergyProps>`
   font-weight: 400;
   line-height: normal;
   white-space: nowrap;
+`
+
+export const CheckButtonWrapper = styled.div`
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
 `

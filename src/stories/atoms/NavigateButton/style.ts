@@ -3,7 +3,7 @@ import { Theme } from '../../../styles/theme'
 
 export const Wrapper = styled.button`
   display: flex;
-  padding: 1rem 1.25rem;
+  padding: 0.75rem 1rem;
   justify-content: center;
   align-items: center;
   gap: 0.625rem;
@@ -17,7 +17,7 @@ export const Text = styled.p`
   color: ${Theme.BLACK};
   text-align: center;
   font-family: SUIT;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

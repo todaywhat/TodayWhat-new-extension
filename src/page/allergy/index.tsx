@@ -48,8 +48,10 @@ const Allergy = () => {
             </S.Allergy>
           ))}
         </S.AllergyContainer>
-        <CheckButton text='저장하기' />
       </S.ContentContainer>
+      <S.CheckButtonWrapper>
+        <CheckButton text='저장하기' />
+      </S.CheckButtonWrapper>
     </S.Wrapper>
   )
 }
