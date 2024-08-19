@@ -4,8 +4,8 @@ import { Theme } from '../../../styles/theme'
 export const Wrapper = styled.div`
   display: flex;
   flex-flow: wrap;
-  width: 343px;
-  height: 53px;
+  width: 100%;
+  height: 3.3125rem;
   align-items: center;
   gap: 8px;
   background-color: transparent;
