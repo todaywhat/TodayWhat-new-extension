@@ -1,5 +1,7 @@
 import TimeButton from '@stories/atoms/TimeButton'
+import { logEvent } from 'firebase/analytics'
 import { useEffect } from 'react'
+import { analytics } from '@util/firebase'
 import * as S from './style'
 
 interface MealProps {
@@ -9,6 +11,10 @@ interface MealProps {
 
 const MealButton: React.FC<MealProps> = ({ mealNumber, setMealNumber }) => {
   const handleDate = (time: number) => {
+    if (mealNumber === time) {
+      return
+    }
+    logEvent(analytics, 'meal_button')
     setMealNumber(time)
   }
 

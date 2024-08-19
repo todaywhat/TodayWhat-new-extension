@@ -2,7 +2,9 @@ import { NoticeMock } from '@mocks/noticeMock'
 import Logo from '@stories/atoms/Logo'
 import Notification from '@stories/atoms/Notification'
 import Return from '@stories/atoms/Return'
+import { logEvent } from 'firebase/analytics'
 import { Link } from 'react-router-dom'
+import { analytics } from '@util/firebase'
 import * as S from './style'
 
 interface NoticeType {
@@ -10,6 +12,10 @@ interface NoticeType {
   title: string
   date: string
   contents: string
+}
+
+const handleNotice = () => {
+  logEvent(analytics, 'notice')
 }
 
 const Notice = () => {
@@ -23,6 +29,7 @@ const Notice = () => {
       <S.NoticeContainer>
         {NoticeMock.map((notice: NoticeType, index: number) => (
           <Link
+            onClick={handleNotice}
             to={`/noticeDetail/${notice.id}`}
             key={index}
             style={{ textDecoration: 'none' }}

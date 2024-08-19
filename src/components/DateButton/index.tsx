@@ -1,6 +1,8 @@
 import { useGetAllSetting } from '@hook/profile/useGetSetting'
 import TimeButton from '@stories/atoms/TimeButton'
+import { logEvent } from 'firebase/analytics'
 import React, { useEffect, useState } from 'react'
+import { analytics } from '@util/firebase'
 import * as S from './style'
 
 interface DateProps {
@@ -53,6 +55,8 @@ const DateButton: React.FC<DateProps> = ({ setCurrentDate }) => {
     if (selectedButton === days) {
       return
     }
+
+    logEvent(analytics, 'data_button')
 
     const today = new Date()
     today.setDate(today.getDate() + days)

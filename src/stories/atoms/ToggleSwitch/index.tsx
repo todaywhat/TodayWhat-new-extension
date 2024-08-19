@@ -1,3 +1,5 @@
+import { logEvent } from 'firebase/analytics'
+import { analytics } from '@util/firebase'
 import * as S from './style'
 
 interface Props {
@@ -13,6 +15,7 @@ const ToggleSwitch: React.FC<Props> = ({
   ...props
 }) => {
   const toggleSwitch = () => {
+    logEvent(analytics, settingKey)
     setIsActive((prevState) => !prevState)
 
     const updatedIsActive = !isActive

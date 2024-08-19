@@ -2,8 +2,10 @@ import { useGetAllergy } from '@hook/profile/useGetAllergy'
 import { allergyMock } from '@mocks/allergyMock'
 import CheckButton from '@stories/atoms/CheckButton'
 import Logo from '@stories/atoms/Logo'
+import { logEvent } from 'firebase/analytics'
 import { useState } from 'react'
 import { AllergyType } from 'types/allergy'
+import { analytics } from '@util/firebase'
 import * as S from './style'
 
 const Allergy = () => {
@@ -12,6 +14,7 @@ const Allergy = () => {
   useGetAllergy(setSelectedAllergies)
 
   const handleClick = (id: number) => {
+    logEvent(analytics, 'select_allergy')
     const isSelected = selectedAllergies.includes(id)
     const updatedAllergies = isSelected
       ? selectedAllergies.filter((allergyId) => allergyId !== id)

@@ -7,8 +7,11 @@ import Return from '@stories/atoms/Return'
 import ToggleSwitch from '@stories/atoms/ToggleSwitch'
 import { Allergies, Calendar, Feedback, Rice } from '@stories/icons/index'
 import SettingList from '@stories/molecules/SettingList'
+import { logEvent } from 'firebase/analytics'
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
+import { analytics } from '@util/firebase'
 import * as S from './style'
 
 const Setting = () => {
@@ -18,6 +21,12 @@ const Setting = () => {
   const [weekendSkip, setWeekendSkip] = useState<boolean>(false)
 
   useGetAllSetting(setMealToggle, setWeekendSkip)
+  const navigate = useNavigate()
+
+  const handleProfile = () => {
+    logEvent(analytics, 'profile_route')
+    navigate('/profile')
+  }
 
   return (
     <S.Wrapper>
@@ -28,7 +37,7 @@ const Setting = () => {
       <S.NavContainer>
         <S.Title>설정</S.Title>
         <MyProfile school={SCHUL_NM} Grade={USER_GRADE} Myclass={USER_CLASS} />
-        <S.ProfileLink to='/profile'>프로필 설정</S.ProfileLink>
+        <S.ProfileLink onClick={handleProfile}>프로필 설정</S.ProfileLink>
       </S.NavContainer>
       <S.BodyContainer>
         <SettingList

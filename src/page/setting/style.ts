@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
@@ -34,7 +33,7 @@ export const Title = styled.p`
   margin-bottom: 0.75rem;
 `
 
-export const ProfileLink = styled(Link)`
+export const ProfileLink = styled.div`
   color: #8e8e8e;
   font-family: SUIT;
   font-size: 0.875rem;
@@ -44,6 +43,7 @@ export const ProfileLink = styled(Link)`
   align-self: self-end;
   text-decoration: none;
   margin-top: 0.25rem;
+  cursor: pointer;
 `
 
 export const BodyContainer = styled.div`
