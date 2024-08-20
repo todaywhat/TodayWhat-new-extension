@@ -13,7 +13,7 @@ interface Notice {
   contents: string
 }
 
-const NoticeDetail = () => {
+const NoticeDetailView = () => {
   const { id } = useParams<{ id: string }>()
   const [notice, setNotice] = useState<Notice | null>(null)
 
@@ -47,4 +47,4 @@ const NoticeDetail = () => {
   )
 }
 
-export default NoticeDetail
+export default NoticeDetailView
