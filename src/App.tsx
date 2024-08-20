@@ -3,7 +3,7 @@ import Allergy from '@page/allergy'
 import Home from '@page/home'
 import Meal from '@page/meal'
 import Notice from '@page/notice'
-import NoticeDetail from '@page/noticeDetail'
+import NoticeDetailView from '@page/noticeDetailView'
 import Profile from '@page/profile'
 import Schedule from '@page/schedule'
 import Setting from '@page/setting'
@@ -21,7 +21,7 @@ const AppRoutes = () => {
         <Route path='/allergy' element={<Allergy />} />
         <Route path='/setting' element={<Setting />} />
         <Route path='/notice' element={<Notice />} />
-        <Route path='/noticeDetail/:id' element={<NoticeDetail />} />
+        <Route path='/noticeDetail/:id' element={<NoticeDetailView />} />
       </Routes>
     </MemoryRouter>
   )
