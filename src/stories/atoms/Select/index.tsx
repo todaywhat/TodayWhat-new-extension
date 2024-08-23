@@ -1,5 +1,5 @@
 import { DRadio, Radio } from '../../assets/svg/index'
-import { Down, Up } from '../../icons/index'
+import { DownTriangle, UpTriangle } from '../../icons/index'
 import * as S from './style'
 
 interface Props {
@@ -37,7 +37,7 @@ const Select: React.FC<Props> = ({
       <S.Category>{category}</S.Category>
       <S.SelectWrapper {...props} onClick={handleToggle}>
         <S.SelectText>{value}</S.SelectText>
-        <S.Icon>{isOpen ? <Up /> : <Down />}</S.Icon>
+        <S.Icon>{isOpen ? <UpTriangle /> : <DownTriangle />}</S.Icon>
       </S.SelectWrapper>
       {isOpen && (
         <S.OptionWrapper>

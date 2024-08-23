@@ -1,4 +1,4 @@
-const Up = () => {
+const UpTriangle = () => {
   return (
     <svg
       width='24'
@@ -19,4 +19,4 @@ const Up = () => {
   )
 }
 
-export default Up
+export default UpTriangle
