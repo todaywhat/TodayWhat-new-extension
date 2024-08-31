@@ -36,12 +36,6 @@
     }
   },
   "rules": {
-    "no-console": [
-      "error",
-      {
-        "allow": ["warn", "error", "info"]
-      }
-    ],
     "@typescript-eslint/no-empty-interface": "off",
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-var-requires": "off",
@@ -64,6 +58,12 @@
           "order": "asc",
           "caseInsensitive": true
         }
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
       }
     ],
     "@typescript-eslint/no-unused-vars": [
