@@ -3,12 +3,12 @@ import { useEffect } from 'react'
 import * as S from './style'
 
 interface MealProps {
-  mealNumber: number
-  setMealNumber: (num: number) => void
+  mealNumber: string
+  setMealNumber: (num: string) => void
 }
 
 const MealButton: React.FC<MealProps> = ({ mealNumber, setMealNumber }) => {
-  const handleDate = (time: number) => {
+  const handleDate = (time: string) => {
     setMealNumber(time)
   }
 
@@ -17,15 +17,15 @@ const MealButton: React.FC<MealProps> = ({ mealNumber, setMealNumber }) => {
     const currentHour = currentDate.getHours()
 
     if (currentHour >= 0 && currentHour < 8) {
-      setMealNumber(0)
+      setMealNumber('1')
     } else if (currentHour >= 8 && currentHour < 13) {
-      setMealNumber(1)
+      setMealNumber('2')
     } else if (currentHour >= 13 && currentHour < 20) {
-      setMealNumber(2)
+      setMealNumber('3')
     }
   }, [setMealNumber])
 
-  const renderTimeButton = (text: string, time: number) => {
+  const renderTimeButton = (text: string, time: string) => {
     return (
       <TimeButton
         text={text}
@@ -37,9 +37,9 @@ const MealButton: React.FC<MealProps> = ({ mealNumber, setMealNumber }) => {
 
   return (
     <S.Wrapper>
-      {renderTimeButton('아침', 0)}
-      {renderTimeButton('점심', 1)}
-      {renderTimeButton('저녁', 2)}
+      {renderTimeButton('아침', '1')}
+      {renderTimeButton('점심', '2')}
+      {renderTimeButton('저녁', '3')}
     </S.Wrapper>
   )
 }
