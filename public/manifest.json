@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.0.6",
+  "version": "1.0.7",
   "short_name": "React App",
   "name": "오늘 뭐임",
   "action": {

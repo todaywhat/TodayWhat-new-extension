@@ -16,7 +16,7 @@ import * as S from './style'
 const Meal = () => {
   const [cookies] = useCookies(['ATPT_OFCDC_SC_CODE', 'SD_SCHUL_CODE'])
   const [currentDate, setCurrentDate] = useState<Date>(new Date())
-  const [mealNumber, setMealNumber] = useState<number>(0)
+  const [mealNumber, setMealNumber] = useState<string>('1')
   const [selectedAllergies, setSelectedAllergies] = useState<number[]>([])
 
   useGetAllergy(setSelectedAllergies)
@@ -29,14 +29,18 @@ const Meal = () => {
   })
 
   const mealData: ProcessedMealData = useMemo(() => {
-    if (data && data[mealNumber]) {
-      const meals = data[mealNumber]?.DDISH_NM.split('<br/>')
-        .map((meal) => meal.trim())
-        .filter((meal) => meal !== '')
-      const calories = data[mealNumber]?.CAL_INFO
-      return { mealData: meals, calInfo: calories }
+    if (data) {
+      const findData = Object.values(data).find(
+        (item) => item.MMEAL_SC_CODE === mealNumber,
+      )
+      if (findData) {
+        const meals = findData.DDISH_NM.split('<br/>')
+          .map((meal) => meal.trim())
+          .filter((meal) => meal !== '')
+        const calories = findData.CAL_INFO
+        return { mealData: meals, calInfo: calories }
+      }
     }
-
     return {
       mealData: ['급식이 없습니다.'],
       calInfo: '칼로리 정보가 없습니다.',
@@ -46,9 +50,9 @@ const Meal = () => {
   const renderTimeButton = () => {
     return (
       <>
-        {mealNumber === 0 && <p>아침</p>}
-        {mealNumber === 1 && <p>점심</p>}
-        {mealNumber === 2 && <p>저녁</p>}
+        {mealNumber === '1' && <p>아침</p>}
+        {mealNumber === '2' && <p>점심</p>}
+        {mealNumber === '3' && <p>저녁</p>}
       </>
     )
   }
