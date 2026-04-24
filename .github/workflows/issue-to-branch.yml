@@ -7,8 +7,6 @@ on:
 jobs:
   create-branch-and-pr:
     runs-on: ubuntu-latest
-    # 'automation' 라벨이 있는 이슈만 실행 (일반 이슈와 구분)
-    if: contains(github.event.issue.labels.*.name, 'automation')
 
     permissions:
       contents: write
