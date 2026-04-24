@@ -1,14 +1,15 @@
 import axios from 'axios'
-import { getDate } from '@util/lib/getDate'
+import { getDate } from '@util/getDate'
 
 interface Cookies {
   ATPT_OFCDC_SC_CODE?: string
   SD_SCHUL_CODE?: string
 }
 
-const getMeal = async (cookies: Cookies, currentDate: Date) => {
+const getMeal = async (cookies: Cookies | null, currentDate: Date) => {
   try {
-    const { ATPT_OFCDC_SC_CODE = '', SD_SCHUL_CODE = '' } = cookies
+    const ATPT_OFCDC_SC_CODE = cookies!.ATPT_OFCDC_SC_CODE
+    const SD_SCHUL_CODE = cookies!.SD_SCHUL_CODE
 
     const { data } = await axios.get(
       'https://open.neis.go.kr/hub/mealServiceDietInfo',
