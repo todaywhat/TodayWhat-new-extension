@@ -1,0 +1,96 @@
+name: Issue → Branch & PR 자동 생성
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-branch-and-pr:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: 레포 체크아웃
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: 브랜치 이름 설정
+        id: vars
+        run: |
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          BRANCH_NAME="feature/${ISSUE_NUMBER}"
+          echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+          echo "issue_number=${ISSUE_NUMBER}" >> $GITHUB_OUTPUT
+
+      - name: feature 브랜치 생성 (main 기준)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b ${{ steps.vars.outputs.branch_name }}
+          git push origin ${{ steps.vars.outputs.branch_name }}
+
+      - name: Draft PR 생성 (feature → test)
+        id: create_pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_URL=$(gh pr create \
+            --title "feat: #${{ steps.vars.outputs.issue_number }} ${{ github.event.issue.title }}" \
+            --body "## 연관 이슈
+          Closes #${{ steps.vars.outputs.issue_number }}
+
+          ## 작업 내용
+          ${{ github.event.issue.body }}
+
+          ## 체크리스트
+          - [ ] 코드 작성 완료
+          - [ ] 테스트 통과
+          - [ ] 코드 리뷰 완료" \
+            --base test \
+            --head ${{ steps.vars.outputs.branch_name }} \
+            --draft)
+          echo "pr_url=${PR_URL}" >> $GITHUB_OUTPUT
+
+      - name: Discord 알림 전송
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -s -X POST "$DISCORD_WEBHOOK" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "embeds": [{
+                "title": "🌿 브랜치 & PR 자동 생성 완료",
+                "color": 3066993,
+                "fields": [
+                  {
+                    "name": "📌 이슈",
+                    "value": "[#${{ steps.vars.outputs.issue_number }} ${{ github.event.issue.title }}](${{ github.event.issue.html_url }})",
+                    "inline": false
+                  },
+                  {
+                    "name": "🔀 브랜치",
+                    "value": "`${{ steps.vars.outputs.branch_name }}` (main 기준)",
+                    "inline": true
+                  },
+                  {
+                    "name": "📋 PR",
+                    "value": "[Draft PR 보기](${{ steps.create_pr.outputs.pr_url }})",
+                    "inline": true
+                  },
+                  {
+                    "name": "🔁 머지 방향",
+                    "value": "`feature/${{ steps.vars.outputs.issue_number }}` → `test` → `main`",
+                    "inline": false
+                  }
+                ],
+                "footer": {
+                  "text": "TodayWhat Extension Pipeline"
+                },
+                "timestamp": "${{ github.event.issue.created_at }}"
+              }]
+            }'
