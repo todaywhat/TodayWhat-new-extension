@@ -1,0 +1,118 @@
+name: Codex 코드 생성 → PR
+
+on:
+  workflow_run:
+    workflows: ["Issue → 브랜치 자동 생성"]
+    types: [completed]
+
+jobs:
+  codex-generate:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: 이슈 정보 추출 & 태스크 파일 생성
+        id: info
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const headBranch = context.payload.workflow_run.head_branch;
+            const match = headBranch.match(/^feature\/(\d+)$/);
+            if (!match) {
+              core.setFailed(`브랜치 형식이 맞지 않습니다: ${headBranch}`);
+              return;
+            }
+            const issueNumber = parseInt(match[1]);
+
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+            });
+
+            core.setOutput('issue_number', String(issueNumber));
+            core.setOutput('branch', headBranch);
+            core.setOutput('title', issue.title);
+
+            const fs = require('fs');
+            const task = `Issue #${issueNumber}: ${issue.title}\n\n${issue.body || '상세 설명 없음'}`;
+            fs.writeFileSync('/tmp/codex-task.txt', task, 'utf8');
+            console.log('태스크 파일 생성 완료');
+            console.log('내용:', task);
+
+      - name: 체크아웃
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.info.outputs.branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Codex CLI 설치
+        run: npm install -g @openai/codex
+
+      - name: Codex 실행
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: codex --approval-mode full-auto "$(cat /tmp/codex-task.txt)"
+
+      - name: 변경사항 커밋 & 푸시
+        id: commit
+        env:
+          ISSUE_NUMBER: ${{ steps.info.outputs.issue_number }}
+          ISSUE_TITLE: ${{ steps.info.outputs.title }}
+          BRANCH: ${{ steps.info.outputs.branch }}
+        run: |
+          git config user.name "codex-bot"
+          git config user.email "codex-bot@users.noreply.github.com"
+
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "변경사항 없음 — Codex가 코드를 생성하지 않았습니다"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            git add -A
+            git commit -m "feat(#${ISSUE_NUMBER}): ${ISSUE_TITLE}"
+            git push origin "${BRANCH}"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: PR 생성
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ steps.info.outputs.issue_number }}
+          ISSUE_TITLE: ${{ steps.info.outputs.title }}
+          BRANCH: ${{ steps.info.outputs.branch }}
+        run: |
+          gh pr create \
+            --title "[#${ISSUE_NUMBER}] ${ISSUE_TITLE}" \
+            --body "Closes #${ISSUE_NUMBER}
+
+          > 🤖 AI(Codex)가 Issue 설명을 기반으로 자동 생성한 코드입니다." \
+            --base main \
+            --head "${BRANCH}"
+
+      - name: 코드 생성 실패 Discord 알림
+        if: steps.commit.outputs.changed == 'false'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ISSUE_NUMBER: ${{ steps.info.outputs.issue_number }}
+          ISSUE_TITLE: ${{ steps.info.outputs.title }}
+        run: |
+          curl -s -X POST "$DISCORD_WEBHOOK" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"⚠️ Codex 코드 생성 없음\",
+                \"color\": 16776960,
+                \"description\": \"Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}\\n\\nCodex가 변경사항을 생성하지 않았습니다. Issue 설명을 더 구체적으로 작성해주세요.\",
+                \"footer\": { \"text\": \"TodayWhat Extension Pipeline\" }
+              }]
+            }"
