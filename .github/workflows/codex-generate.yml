@@ -13,20 +13,26 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: read
 
     steps:
-      - name: 이슈 정보 추출 & 태스크 파일 생성
+      - name: Artifact 다운로드 (이슈 정보)
+        uses: actions/download-artifact@v4
+        with:
+          name: issue-info
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/
+
+      - name: 이슈 정보 읽기 & 태스크 파일 생성
         id: info
         uses: actions/github-script@v7
         with:
           script: |
-            const headBranch = context.payload.workflow_run.head_branch;
-            const match = headBranch.match(/^feature\/(\d+)$/);
-            if (!match) {
-              core.setFailed(`브랜치 형식이 맞지 않습니다: ${headBranch}`);
-              return;
-            }
-            const issueNumber = parseInt(match[1]);
+            const fs = require('fs');
+            const raw = fs.readFileSync('/tmp/issue-info.txt', 'utf8').trim().split('\n');
+            const issueNumber = parseInt(raw[0]);
+            const branch = raw[1];
 
             const { data: issue } = await github.rest.issues.get({
               owner: context.repo.owner,
@@ -35,14 +41,12 @@ jobs:
             });
 
             core.setOutput('issue_number', String(issueNumber));
-            core.setOutput('branch', headBranch);
+            core.setOutput('branch', branch);
             core.setOutput('title', issue.title);
 
-            const fs = require('fs');
             const task = `Issue #${issueNumber}: ${issue.title}\n\n${issue.body || '상세 설명 없음'}`;
             fs.writeFileSync('/tmp/codex-task.txt', task, 'utf8');
-            console.log('태스크 파일 생성 완료');
-            console.log('내용:', task);
+            console.log('태스크:', task);
 
       - name: 체크아웃
         uses: actions/checkout@v4
@@ -74,7 +78,7 @@ jobs:
           git config user.email "codex-bot@users.noreply.github.com"
 
           if git diff --quiet && git diff --staged --quiet; then
-            echo "변경사항 없음 — Codex가 코드를 생성하지 않았습니다"
+            echo "변경사항 없음"
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             git add -A
@@ -99,7 +103,7 @@ jobs:
             --base main \
             --head "${BRANCH}"
 
-      - name: 코드 생성 실패 Discord 알림
+      - name: 코드 생성 없음 Discord 알림
         if: steps.commit.outputs.changed == 'false'
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
