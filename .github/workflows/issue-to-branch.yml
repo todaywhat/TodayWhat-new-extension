@@ -10,6 +10,7 @@ jobs:
 
     permissions:
       contents: write
+      actions: write
 
     steps:
       - name: 레포 체크아웃
@@ -32,6 +33,20 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b ${{ steps.vars.outputs.branch_name }}
           git push origin ${{ steps.vars.outputs.branch_name }}
+
+      - name: 이슈 정보 artifact 저장
+        run: |
+          printf '%s\n%s' \
+            "${{ steps.vars.outputs.issue_number }}" \
+            "${{ steps.vars.outputs.branch_name }}" \
+            > /tmp/issue-info.txt
+
+      - name: Artifact 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-info
+          path: /tmp/issue-info.txt
+          retention-days: 1
 
       - name: Discord 알림 전송
         env:
