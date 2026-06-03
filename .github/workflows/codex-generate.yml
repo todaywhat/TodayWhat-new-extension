@@ -4,11 +4,17 @@ on:
   workflow_run:
     workflows: ["Issue → 브랜치 자동 생성"]
     types: [completed]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: '재시도할 Issue 번호'
+        required: true
+        type: string
 
 jobs:
   codex-generate:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     permissions:
       contents: write
@@ -16,7 +22,8 @@ jobs:
       actions: read
 
     steps:
-      - name: Artifact 다운로드 (이슈 정보)
+      - name: Artifact 다운로드 (workflow_run 전용)
+        if: github.event_name == 'workflow_run'
         uses: actions/download-artifact@v4
         with:
           name: issue-info
@@ -24,15 +31,22 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: /tmp/
 
-      - name: 이슈 정보 읽기 & 태스크 파일 생성
+      - name: 이슈 정보 추출 & 태스크 파일 생성
         id: info
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            const raw = fs.readFileSync('/tmp/issue-info.txt', 'utf8').trim().split('\n');
-            const issueNumber = parseInt(raw[0]);
-            const branch = raw[1];
+            let issueNumber, branch;
+
+            if (context.eventName === 'workflow_dispatch') {
+              issueNumber = parseInt(context.payload.inputs.issue_number);
+              branch = `feature/${issueNumber}`;
+            } else {
+              const raw = fs.readFileSync('/tmp/issue-info.txt', 'utf8').trim().split('\n');
+              issueNumber = parseInt(raw[0]);
+              branch = raw[1];
+            }
 
             const { data: issue } = await github.rest.issues.get({
               owner: context.repo.owner,
@@ -76,9 +90,7 @@ jobs:
         run: |
           git config user.name "codex-bot"
           git config user.email "codex-bot@users.noreply.github.com"
-
           if git diff --quiet && git diff --staged --quiet; then
-            echo "변경사항 없음"
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             git add -A
@@ -112,11 +124,4 @@ jobs:
         run: |
           curl -s -X POST "$DISCORD_WEBHOOK" \
             -H "Content-Type: application/json" \
-            -d "{
-              \"embeds\": [{
-                \"title\": \"⚠️ Codex 코드 생성 없음\",
-                \"color\": 16776960,
-                \"description\": \"Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}\\n\\nCodex가 변경사항을 생성하지 않았습니다. Issue 설명을 더 구체적으로 작성해주세요.\",
-                \"footer\": { \"text\": \"TodayWhat Extension Pipeline\" }
-              }]
-            }"
+            -d "{\"embeds\":[{\"title\":\"⚠️ Codex 코드 생성 없음\",\"color\":16776960,\"description\":\"Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}\\n\\nCodex가 변경사항을 생성하지 않았습니다. Issue 설명을 더 구체적으로 작성해주세요.\",\"footer\":{\"text\":\"TodayWhat Pipeline\"}}]}"
